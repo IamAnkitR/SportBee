@@ -38,7 +38,7 @@ const SigninForm: React.FC = () => {
       console.log("Sign-in successful");
 
       //After successful signin, first we will save the token in localStorage
-      localStorage.setItem("authToken", userData.token);
+      localStorage.setItem("authToken", userData.auth_token);
       // Then we'll extract user object and then store it in string format
       localStorage.setItem("userData", JSON.stringify(userData.user));
 
