@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { API_ENDPOINT } from "../../config/constants";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 const SignupForm: React.FC = () => {
   const [userName, setUserName] = useState("");
@@ -33,7 +33,7 @@ const SignupForm: React.FC = () => {
       console.log("Sign-up successful");
 
       // set the token in localStorage
-      localStorage.setItem("authToken", data.token);
+      localStorage.setItem("authToken", data.auth_token);
 
       // set the userData in localStorage in form of String
       localStorage.setItem("userData", JSON.stringify(data.user));
@@ -92,6 +92,9 @@ const SignupForm: React.FC = () => {
       >
         Sign up
       </button>
+      <Link to={"/signin"}>
+        <button>Signin</button>
+      </Link>
     </form>
   );
 };
