@@ -4,8 +4,7 @@ import Signin from "../pages/signin";
 import Signup from "../pages/signup";
 import Logout from "../pages/logout";
 import Dashboard from "../pages/dashboard";
-// import ProtectedRoute from "./ProtectedRoute";
-// import AccountLayout from "../layouts/account";
+import ProtectedRoute from "./ProtectedRoute";
 
 const router = createBrowserRouter([
   {
@@ -30,7 +29,11 @@ const router = createBrowserRouter([
       { index: true, element: <Navigate to="/account/dashboard" replace /> },
       {
         path: "dashboard",
-        element: <Dashboard />,
+        element: (
+          <ProtectedRoute>
+            <Dashboard />
+          </ProtectedRoute>
+        ),
       },
     ],
   },
