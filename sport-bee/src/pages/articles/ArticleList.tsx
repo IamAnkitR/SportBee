@@ -1,5 +1,6 @@
 import { useReducer, useEffect } from "react";
 import { API_ENDPOINT } from "../../config/constants";
+import { Link } from "react-router-dom";
 
 interface Article {
   sport: {
@@ -21,6 +22,10 @@ interface State {
 interface Action {
   type: string;
   payload?: any;
+}
+
+interface ArticlesProps {
+  articles: number;
 }
 
 const reducer = (state: State, action: Action): State => {
@@ -46,7 +51,7 @@ const reducer = (state: State, action: Action): State => {
   }
 };
 
-const ArticleList: React.FC = () => {
+const ArticleList: React.FC<ArticlesProps> = () => {
   const [state, dispatch] = useReducer(reducer, {
     articles: [],
     isLoading: true,
@@ -92,11 +97,22 @@ const ArticleList: React.FC = () => {
                     <h1 className="font-semibold">{article.title}</h1>
                   </div>
                   <div key={article.summary}>
-                    <p>{article.summary}</p>
+                    <p>{article.summary.slice(0, 100) + "..."}</p>
                   </div>
-                  <div>
-                    <p>{article.date.slice(0, 10)}</p>
-                  </div>
+                  <span className="flex justify-between mt-4">
+                    <p className="flex justify-start">
+                      {article.date.slice(0, 10)}
+                    </p>
+
+                    <Link to={`/articles/${article.id}`}>
+                      <button
+                        id="newTaskBtn"
+                        className="rounded-md bg-blue-600 px-4 py-2 m-2 text-sm font-medium text-white hover:bg-opacity-95 focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75"
+                      >
+                        Read More...
+                      </button>
+                    </Link>
+                  </span>
                 </div>
                 <div className="w-8/12 h-48 flex justify-center p-2">
                   <img

@@ -1,15 +1,22 @@
 import { Navigate, createBrowserRouter } from "react-router-dom";
-// import ProtectedRoute from "./ProtectedRoute";
 import Signin from "../pages/signin";
 import Signup from "../pages/signup";
 import Logout from "../pages/logout";
 import Dashboard from "../pages/dashboard";
 import ProtectedRoute from "./ProtectedRoute";
+import Content from "../pages/articles/Content";
+import Preferences from "../pages/user/Preferences";
+
+const isUserAuthenticated = localStorage.getItem("authToken") !== null;
 
 const router = createBrowserRouter([
   {
     path: "/",
-    element: <Dashboard />,
+    element: isUserAuthenticated ? (
+      <Navigate to="/account/dashboard" replace />
+    ) : (
+      <Dashboard />
+    ),
   },
   {
     path: "/signin",
@@ -24,7 +31,11 @@ const router = createBrowserRouter([
     element: <Logout />,
   },
   {
-    path: "account",
+    path: "/articles/:id",
+    element: <Content />,
+  },
+  {
+    path: "/account",
     children: [
       { index: true, element: <Navigate to="/account/dashboard" replace /> },
       {
@@ -34,6 +45,16 @@ const router = createBrowserRouter([
             <Dashboard />
           </ProtectedRoute>
         ),
+        children: [
+          {
+            path: "preferences",
+            element: (
+              <ProtectedRoute>
+                <Preferences />
+              </ProtectedRoute>
+            ),
+          },
+        ],
       },
     ],
   },
