@@ -6,6 +6,7 @@ import Dashboard from "../pages/dashboard";
 import ProtectedRoute from "./ProtectedRoute";
 import Content from "../pages/articles/Content";
 import Preferences from "../pages/user/Preferences";
+import ArticleList from "../pages/articles/ArticleList";
 
 const isUserAuthenticated = localStorage.getItem("authToken") !== null;
 
@@ -33,6 +34,10 @@ const router = createBrowserRouter([
   {
     path: "/articles/:id",
     element: <Content />,
+  },
+  {
+    path: "/sport/:id",
+    element: <ArticleList />,
   },
   {
     path: "/account",

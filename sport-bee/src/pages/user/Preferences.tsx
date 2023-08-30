@@ -1,8 +1,9 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { API_ENDPOINT } from "../../config/constants";
-
+import { useNavigate } from "react-router-dom";
 const Preferences = () => {
+  const Naviagate = useNavigate();
   const [selectedPreferences, setSelectedPreferences] = useState({
     basketball: false,
     americanFootball: false,
@@ -18,6 +19,7 @@ const Preferences = () => {
       ...prevSelectedPreferences,
       [sport]: event.target.checked,
     }));
+    console.log("clicked");
   };
 
   const userPrefrences = async () => {
@@ -68,6 +70,7 @@ const Preferences = () => {
     } catch (error) {
       console.error("Error saving preferences:", error);
     }
+    Naviagate("../");
   };
 
   return (

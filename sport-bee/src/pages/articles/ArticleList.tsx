@@ -1,6 +1,6 @@
-import { useReducer, useEffect } from "react";
-import { API_ENDPOINT } from "../../config/constants";
+import React, { useReducer, useEffect, useState } from "react";
 import { Link } from "react-router-dom";
+import { API_ENDPOINT } from "../../config/constants";
 
 interface Article {
   sport: {
@@ -24,9 +24,29 @@ interface Action {
   payload?: any;
 }
 
-interface ArticlesProps {
-  articles: number;
-}
+const sports = [
+  {
+    id: 1,
+    name: "Basketball",
+  },
+  {
+    id: 2,
+    name: "American Football",
+  },
+
+  {
+    id: 4,
+    name: "Field Hockey",
+  },
+  {
+    id: 5,
+    name: "Table Tennis",
+  },
+  {
+    id: 6,
+    name: "Cricket",
+  },
+];
 
 const reducer = (state: State, action: Action): State => {
   switch (action.type) {
@@ -44,27 +64,35 @@ const reducer = (state: State, action: Action): State => {
     case "API_CALL_ERROR":
       return {
         ...state,
-        isLoading: true,
+        isLoading: false,
       };
     default:
       return state;
   }
 };
 
-const ArticleList: React.FC<ArticlesProps> = () => {
+const ArticleList: React.FC = () => {
   const [state, dispatch] = useReducer(reducer, {
     articles: [],
     isLoading: true,
   });
 
-  useEffect(() => {
-    fetchArticles();
-  }, []);
+  const [selectedSport, setSelectedSport] = useState(1);
 
-  const fetchArticles = async () => {
-    const token = localStorage.getItem("authToken") ?? "";
+  useEffect(() => {
+    fetchArticles(selectedSport);
+  }, [selectedSport]);
+
+  const handleSelectSport = (sportId: number) => {
+    console.log(sportId);
+    setSelectedSport(sportId);
+  };
+
+  const fetchArticles = async (sportId: number) => {
+    const token = localStorage.getItem("authToken") || "";
 
     try {
+      dispatch({ type: "API_CALL_START" });
       const response = await fetch(`${API_ENDPOINT}/articles`, {
         method: "GET",
         headers: {
@@ -73,60 +101,74 @@ const ArticleList: React.FC<ArticlesProps> = () => {
         },
       });
       const data = await response.json();
-      dispatch({ type: "API_CALL_END", payload: data });
+      const filteredArticles = data.filter(
+        (article) => article.sport.id === sportId
+      );
+      dispatch({ type: "API_CALL_END", payload: filteredArticles });
     } catch (error) {
       console.log("Error fetching articles:", error);
       dispatch({ type: "API_CALL_ERROR" });
     }
   };
-  return (
-    <div>
-      {state.isLoading ? (
-        <div>Loading...</div>
-      ) : (
-        <div className="flex flex-col">
-          {state.articles.map((article) => (
-            <div key={article.id}>
-              <div className="w-8/12 flex justify-between bg-white m-2 p-2 h-48">
-                <div
-                  key={article.sport.id}
-                  className="w-screen flex flex-col p-2"
-                >
-                  <h1 className="font-bold text-xl">{article.sport.name}</h1>
-                  <div key={article.title}>
-                    <h1 className="font-semibold">{article.title}</h1>
-                  </div>
-                  <div key={article.summary}>
-                    <p>{article.summary.slice(0, 100) + "..."}</p>
-                  </div>
-                  <span className="flex justify-between mt-4">
-                    <p className="flex justify-start">
-                      {article.date.slice(0, 10)}
-                    </p>
 
-                    <Link to={`/articles/${article.id}`}>
-                      <button
-                        id="newTaskBtn"
-                        className="rounded-md bg-blue-600 px-4 py-2 m-2 text-sm font-medium text-white hover:bg-opacity-95 focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75"
-                      >
-                        Read More...
-                      </button>
-                    </Link>
-                  </span>
-                </div>
-                <div className="w-8/12 h-48 flex justify-center p-2">
-                  <img
-                    className="h-40 w-10/12 static border-4 rounded-xl border-gray-300"
-                    src={article.thumbnail}
-                    alt=""
-                  />
+  return (
+    <>
+      <div>
+        <div>
+          <div className="flex justify-start border-t-2 border-gray-600">
+            {sports.map((sport) => (
+              <button
+                key={sport.id}
+                className={
+                  selectedSport === sport.id
+                    ? "active border-2 p-2 m-2 ml-6 border-gray-400 rounded-lg bg-gray-400"
+                    : "p-2 m-2 bg-gray-300 rounded-lg ml-6"
+                }
+                onClick={() => handleSelectSport(sport.id)}
+              >
+                {sport.name}
+              </button>
+            ))}
+          </div>
+        </div>
+      </div>
+      <div className="bg-gray-100 min-h-screen py-12 px-4 sm:px-6 lg:px-8">
+        {state.isLoading ? (
+          <div>Loading...</div>
+        ) : (
+          <div className="flex flex-col">
+            {state.articles.map((article) => (
+              <div key={article.id}>
+                <div className="w-8/12 flex justify-between bg-white m-2 p-2 h-48">
+                  <div className="w-screen flex flex-col p-2">
+                    <h1 className="font-bold text-xl">{article.sport.name}</h1>
+                    <h1 className="font-semibold">{article.title}</h1>
+                    <p>{article.summary.slice(0, 100) + "..."}</p>
+                    <span className="flex justify-between mt-4">
+                      <p className="flex justify-start">
+                        {article.date.slice(0, 10)}
+                      </p>
+                      <Link to={`/articles/${article.id}`}>
+                        <button className="rounded-md bg-blue-600 px-4 py-2 m-2 text-sm font-medium text-white hover:bg-opacity-95 focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75">
+                          Read More...
+                        </button>
+                      </Link>
+                    </span>
+                  </div>
+                  <div className="w-8/12 h-48 flex justify-center p-2">
+                    <img
+                      className="h-40 w-10/12 static border-4 rounded-xl border-gray-300"
+                      src={article.thumbnail}
+                      alt=""
+                    />
+                  </div>
                 </div>
               </div>
-            </div>
-          ))}
-        </div>
-      )}
-    </div>
+            ))}
+          </div>
+        )}
+      </div>
+    </>
   );
 };
 
