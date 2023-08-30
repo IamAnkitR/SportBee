@@ -115,7 +115,7 @@ const ArticleList: React.FC = () => {
     <>
       <div>
         <div>
-          <div className="flex justify-start border-t-2 border-gray-600">
+          <div className="flex justify-start ml-6 pt-4 mt-1">
             {sports.map((sport) => (
               <button
                 key={sport.id}
@@ -132,7 +132,7 @@ const ArticleList: React.FC = () => {
           </div>
         </div>
       </div>
-      <div className="bg-gray-100 min-h-screen py-12 px-4 sm:px-6 lg:px-8">
+      <div className="bg-gray-100 min-h-screen py-2 px-4 sm:px-6 lg:px-8">
         {state.isLoading ? (
           <div>Loading...</div>
         ) : (

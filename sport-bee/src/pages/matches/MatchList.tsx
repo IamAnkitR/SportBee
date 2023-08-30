@@ -75,7 +75,7 @@ const MatchList: React.FC = () => {
   };
   return (
     <>
-      <div className="flex">
+      <div className="flex pt-4 border-b-2 border-gray-400 pb-6 bg-gray-300 pl-6">
         {state.matches.map(
           (match) =>
             match.isRunning && (

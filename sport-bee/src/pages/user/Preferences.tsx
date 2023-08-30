@@ -26,7 +26,9 @@ const Preferences = () => {
     setIsModalOpen(false);
   };
 
-  const handleCheckboxChange = (event) => {
+  const handleCheckboxChange = (event: {
+    target: { name: string; checked: boolean };
+  }) => {
     const sport = event.target.name;
     setSelectedPreferences((prevSelectedPreferences) => ({
       ...prevSelectedPreferences,
@@ -119,7 +121,7 @@ const Preferences = () => {
         <Transition appear show={isModalOpen} as={Fragment}>
           <Dialog
             as="div"
-            className="fixed inset-0 z-50 overflow-y-auto"
+            className="fixed inset-0 z-50 overflow-y-auto backdrop-blur-sm "
             onClose={closeModal}
           >
             <Transition.Child
@@ -133,7 +135,7 @@ const Preferences = () => {
             >
               <div className="fixed inset-0 bg-black bg-opacity-25" />
             </Transition.Child>
-            <div className="flex min-h-screen items-center justify-center p-4">
+            <div className="flex min-h-screen  items-center justify-center p-4">
               <Transition.Child
                 as={Fragment}
                 enter="ease-out duration-300"
@@ -143,10 +145,10 @@ const Preferences = () => {
                 leaveFrom="opacity-100 scale-100"
                 leaveTo="opacity-0 scale-95"
               >
-                <Dialog.Panel className="w-full max-w-md transform overflow-hidden bg-white p-6 text-left align-middle shadow-xl transition-all">
+                <Dialog.Panel className="w-full max-w-md transform overflow-hidden bg-white p-6 text-left align-middle shadow-xl transition-all rounded-lg">
                   <Dialog.Title
                     as="h3"
-                    className="text-lg font-medium leading-6 text-gray-900"
+                    className="text-xl font-bold leading-6 text-gray-900 p-2 text-center"
                   >
                     Choose Your Favorite Sports
                   </Dialog.Title>
@@ -156,7 +158,6 @@ const Preferences = () => {
                         type="checkbox"
                         name={sport}
                         id={sport}
-                        checked={selectedPreferences[sport]}
                         onChange={handleCheckboxChange}
                       />
                       {sport}

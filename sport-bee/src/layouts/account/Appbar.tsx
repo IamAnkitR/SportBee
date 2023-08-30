@@ -2,7 +2,6 @@ import { Fragment, useEffect, useState } from "react";
 import { Disclosure, Menu, Transition } from "@headlessui/react";
 import { UserCircleIcon } from "@heroicons/react/24/outline";
 import Logo from "../../assets/images/sportbee-logo.png";
-import { Link } from "react-router-dom";
 import Preferences from "../../pages/user/Preferences";
 
 const userNavigation = [
