@@ -90,10 +90,15 @@ const SigninForm: React.FC = () => {
           Sign In
         </button>
       </form>
-      <div>
+      <div className="flex justify-evenly">
         <Link to="/signup">
           <button className="logOut" id="logOut">
             Signup
+          </button>
+        </Link>
+        <Link to="/">
+          <button className="logOut" id="logOut">
+            Home
           </button>
         </Link>
       </div>

@@ -7,6 +7,7 @@ import ProtectedRoute from "./ProtectedRoute";
 import Content from "../pages/articles/Content";
 import Preferences from "../pages/user/Preferences";
 import ArticleList from "../pages/articles/ArticleList";
+import Notfound from "../NotFound";
 
 const isUserAuthenticated = localStorage.getItem("authToken") !== null;
 
@@ -38,6 +39,14 @@ const router = createBrowserRouter([
   {
     path: "/sport/:id",
     element: <ArticleList />,
+  },
+  {
+    path: "/notfound",
+    element: <Notfound />,
+  },
+  {
+    path: "*",
+    element: <Notfound />,
   },
   {
     path: "/account",

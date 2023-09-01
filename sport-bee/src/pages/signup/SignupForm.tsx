@@ -92,9 +92,16 @@ const SignupForm: React.FC = () => {
       >
         Sign up
       </button>
-      <Link to={"/signin"}>
-        <button>Signin</button>
-      </Link>
+      <div className="flex justify-evenly">
+        <Link to={"/signin"}>
+          <button>Signin</button>
+        </Link>
+        <Link to="/">
+          <button className="logOut" id="logOut">
+            Home
+          </button>
+        </Link>
+      </div>
     </form>
   );
 };

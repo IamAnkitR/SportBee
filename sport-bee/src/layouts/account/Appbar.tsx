@@ -48,7 +48,7 @@ const Appbar = () => {
                   {!user && (
                     <Menu as="div" className="relative ml-3">
                       <div>
-                        <Menu.Button className="rounded-full bg-white p-1 text-gray-400 hover:text-blue-600">
+                        <Menu.Button className="rounded-full bg-white px-2 py-1 text-gray-400 hover:text-blue-600">
                           <UserCircleIcon
                             className="h-6 w-6"
                             aria-hidden="true"
@@ -87,7 +87,7 @@ const Appbar = () => {
                   {user && (
                     <Menu as="div" className="relative ml-3">
                       <div>
-                        <Menu.Button className="rounded-full bg-white p-1 text-gray-400 hover:text-blue-600">
+                        <Menu.Button className="rounded-full bg-gray-500 p-1 text-white hover:text-blue-600">
                           <UserCircleIcon
                             className="h-6 w-6"
                             aria-hidden="true"
