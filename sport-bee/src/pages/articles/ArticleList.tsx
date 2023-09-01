@@ -21,6 +21,7 @@ interface State {
 
 interface Action {
   type: string;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   payload?: any;
 }
 
@@ -102,7 +103,7 @@ const ArticleList: React.FC = () => {
       });
       const data = await response.json();
       const filteredArticles = data.filter(
-        (article) => article.sport.id === sportId
+        (article: { sport: { id: number } }) => article.sport.id === sportId
       );
       dispatch({ type: "API_CALL_END", payload: filteredArticles });
     } catch (error) {
