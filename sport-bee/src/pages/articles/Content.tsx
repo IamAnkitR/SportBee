@@ -93,6 +93,7 @@ const Content = () => {
         },
       });
       const data = await response.json();
+      console.log(data);
       dispatch({ type: "FETCH_CONTENT_SUCCESS", payload: data });
     } catch (error) {
       console.log("Error fetching content:", error);
@@ -104,46 +105,49 @@ const Content = () => {
   };
 
   return (
-    <div className="bg-gray-100 min-h-screen py-12 px-4 sm:px-6 lg:px-8">
-      {state.isLoading ? (
-        <div>Loading Article Content...</div>
-      ) : (
-        <div className="max-w-3xl mx-auto">
-          <Link
-            to="/"
-            className="text-blue-600
-              bg-red-400 p-1 rounded border-black border-2 cursor-pointer"
-          >
-            Home
-          </Link>
-          <div className="flex justify-center">
-            {state.content.sport.name && (
-              <p className="mt-2 text-lg leading-6 text-gray-500 font-semibold">
-                {state.content.sport.name} | {state.content.date.slice(0, 10)}
-              </p>
-            )}
+    <div className="bg-gray-900 text-white min-h-screen">
+      <div className="mx-auto p-4">
+        <Link
+          to="/"
+          className="text-white bg-gray-500 p-1 rounded-lg border-black border-2 cursor-pointer block text-center my-4 mx-auto w-20"
+        >
+          Home
+        </Link>
+        <div className="flex">
+          <div className="w-1/2 pr-8 max-h-screen overflow-hidden relative">
+            <div className="h-screen w-full absolute inset-0 mt-4">
+              <img
+                className="h-full w-full object-cover rounded-lg shadow-2xl mx-auto"
+                src={state.content.thumbnail}
+                alt="Sport Image"
+              />
+            </div>
           </div>
-          {state.content.teams && state.content.teams.length === 2 && (
-            <p className="mt-2 leading-6 text-gray-500 text-center text-xl">
-              {state.content.teams[0].name} vs {state.content.teams[1].name}
-            </p>
-          )}
-          <div className="text-center">
-            <h1 className="text-3xl leading-8 font-extrabold text-gray-900 sm:text-4xl sm:leading-10">
-              {state.content.title}
-            </h1>
-          </div>
-          <div className="mt-6 prose prose-indigo prose-lg text-gray-500 mx-auto">
-            <img
-              className="h-90 w-4/12 static rounded-lg shadow-2xl mx-auto"
-              src={state.content.thumbnail}
-              alt="Sport"
-            />
-            <p>{state.content.summary}</p>
-            <div dangerouslySetInnerHTML={{ __html: state.content.content }} />
+          <div className="w-1/2">
+            <div className="text-center">
+              <h1 className="text-3xl leading-8 font-extrabold text-gray-100 sm:text-4xl sm:leading-10 mt-4">
+                {state.content.title}
+              </h1>
+            </div>
+            <div>
+              {state.content.teams && state.content.teams.length === 2 && (
+                <p className="mt-4 leading-6 text-red-500 text-center text-xl">
+                  {state.content.teams[0].name} vs {state.content.teams[1].name}
+                </p>
+              )}
+            </div>
+            <div className="mt-6 prose prose-indigo prose-lg text-gray-100 text-center">
+              <p className="text-xl">{state.content.summary}</p>
+              <div className="flex justify-center mt-4">
+                <div
+                  className="w-9/12 text-start text-lg"
+                  dangerouslySetInnerHTML={{ __html: state.content.content }}
+                />
+              </div>
+            </div>
           </div>
         </div>
-      )}
+      </div>
     </div>
   );
 };
