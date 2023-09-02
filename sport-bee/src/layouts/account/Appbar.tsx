@@ -35,7 +35,7 @@ const MenuButton = ({ user, items }: MenuButtonProps) => (
       <Menu.Button
         className={`rounded-full ${
           user
-            ? "bg-gray-500 p-1 text-white"
+            ? "bg-gray-500 p-1 text-white hover:text-blue-600"
             : "bg-gray-500 px-2 py-1 text-white hover:text-blue-600"
         }`}
       >
