@@ -20,8 +20,7 @@ interface State {
 
 interface Action {
   type: string;
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  payload?: any;
+  payload?: Match[];
 }
 
 const reducer = (state: State, action: Action): State => {
@@ -35,7 +34,7 @@ const reducer = (state: State, action: Action): State => {
       return {
         ...state,
         isLoading: false,
-        matches: action.payload,
+        matches: action.payload || [],
       };
     case "API_CALL_ERROR":
       return {

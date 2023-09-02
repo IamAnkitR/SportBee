@@ -21,8 +21,7 @@ interface State {
 
 interface Action {
   type: string;
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  payload?: any;
+  payload?: Article[];
 }
 
 const sports = [
@@ -60,7 +59,7 @@ const reducer = (state: State, action: Action): State => {
       return {
         ...state,
         isLoading: false,
-        articles: action.payload,
+        articles: action.payload || [],
       };
     case "API_CALL_ERROR":
       return {

@@ -90,14 +90,17 @@ const SigninForm: React.FC = () => {
           Sign In
         </button>
       </form>
-      <div className="flex justify-evenly">
+      <div className="flex justify-evenly mt-2">
         <Link to="/signup">
-          <button className="logOut" id="logOut">
+          <button
+            className="bg-gray-500 hover:bg-gray-700 text-white font-semibold py-2 px-4 rounded-full"
+            id="logOut"
+          >
             Signup
           </button>
         </Link>
         <Link to="/">
-          <button className="logOut" id="logOut">
+          <button className="bg-gray-500 hover:bg-gray-700 text-white font-semibold py-2 px-4 rounded-full">
             Home
           </button>
         </Link>
