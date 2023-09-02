@@ -68,7 +68,6 @@ const MatchList: React.FC = () => {
         },
       });
       const data = await response.json();
-      console.log(data);
       dispatch({ type: "API_CALL_END", payload: data.matches });
     } catch (error) {
       console.log("Error fetching articles:", error);
@@ -101,6 +100,7 @@ const MatchList: React.FC = () => {
 
                 <h1 className="pl-2">{match.location}</h1>
               </div>
+              <h1 className="text-center">Score</h1>
             </div>
           </div>
         ))}
