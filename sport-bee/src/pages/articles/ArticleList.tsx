@@ -146,7 +146,11 @@ const ArticleList: React.FC = () => {
                     <p>{article.summary.slice(0, 100) + "..."}</p>
                     <span className="flex justify-between mt-4">
                       <p className="flex justify-start">
-                        {article.date.slice(0, 10)}
+                        {new Date(article.date).toLocaleString("en-CA", {
+                          day: "numeric",
+                          month: "short",
+                          year: "numeric",
+                        })}
                       </p>
                       <Link to={`/articles/${article.id}`}>
                         <button className="rounded-md bg-blue-600 px-4 py-2 m-2 text-sm font-medium text-white hover:bg-opacity-95 focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75">
