@@ -105,25 +105,25 @@ const Content = () => {
   };
 
   return (
-    <div className="bg-gray-900 text-white min-h-screen">
+    <div className="w-9/12 transform overflow-hidden bg-gray-900  text-white p-6 text-left shadow-xl transition-all rounded-lg m-auto">
       <div className="mx-auto p-4">
         <Link
           to="/"
-          className="text-white bg-gray-500 p-1 rounded-lg border-black border-2 cursor-pointer block text-center my-4 mx-auto w-20"
+          className="text-white bg-red-600 p-1 rounded-lg border-black border-2 cursor-pointer block text-center mb-2 w-20"
         >
           Home
         </Link>
         <div className="flex">
-          <div className="w-1/2 pr-8 max-h-screen overflow-hidden relative">
-            <div className="h-screen w-full absolute inset-0 mt-4">
+          <div className="w-1/2 pr-8 max-h-screen overflow-hidden relative mx-auto">
+            <div className="h-8/12 w-full absolute inset-0 mt-6">
               <img
-                className="h-full w-full object-cover rounded-lg shadow-2xl mx-auto"
+                className="my-32 h-1/2 w-full object-cover rounded-lg shadow-2xl align-middle"
                 src={state.content.thumbnail}
                 alt="Sport Image"
               />
             </div>
           </div>
-          <div className="w-1/2">
+          <div className="w-8/12 bg-gray-800 ml-4 p-6 rounded-lg h-screen overflow-y-auto">
             <div className="text-center">
               <h1 className="text-3xl leading-8 font-extrabold text-gray-100 sm:text-4xl sm:leading-10 mt-4">
                 {state.content.title}
@@ -140,7 +140,7 @@ const Content = () => {
               <p className="text-xl">{state.content.summary}</p>
               <div className="flex justify-center mt-4">
                 <div
-                  className="w-9/12 text-start text-lg"
+                  className="w-9/12 text-start text-lg mb-2 "
                   dangerouslySetInnerHTML={{ __html: state.content.content }}
                 />
               </div>
