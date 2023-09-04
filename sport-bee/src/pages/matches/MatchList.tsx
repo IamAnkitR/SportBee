@@ -107,7 +107,7 @@ const MatchList: React.FC = () => {
                 <h1 className="pl-2">{match.location}</h1>
               </div>
               <h1 className="flex justify-end">
-                <button>{renderMatchDetailsWithId(match.id)}</button>
+                {renderMatchDetailsWithId(match.id)}
               </h1>
             </div>
           </div>
