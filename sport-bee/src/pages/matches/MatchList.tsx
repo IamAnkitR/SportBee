@@ -77,7 +77,6 @@ const MatchList: React.FC = () => {
   };
 
   const renderMatchDetailsWithId = (id: number) => {
-    console.log("clicked with id: ", id);
     return <MatchDetails id={id} />;
   };
 

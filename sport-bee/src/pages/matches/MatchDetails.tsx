@@ -17,7 +17,6 @@ interface MatchData {
 }
 
 const MatchDetails: React.FC<{ id: number }> = ({ id }) => {
-  console.log(id);
   const [matchData, setMatchData] = useState<MatchData | null>(null); // State to store match data
   const [isModalOpen, setIsModalOpen] = useState(false);
 
@@ -47,7 +46,6 @@ const MatchDetails: React.FC<{ id: number }> = ({ id }) => {
       }
 
       const data = await response.json();
-      console.log(data);
       setMatchData(data);
     } catch (error) {
       console.error("Error fetching match details", error);
@@ -71,7 +69,7 @@ const MatchDetails: React.FC<{ id: number }> = ({ id }) => {
         <Transition appear show={isModalOpen} as={Fragment}>
           <Dialog
             as="div"
-            className="fixed inset-0 z-50 overflow-y-auto backdrop-blur-sm"
+            className="fixed inset-0 z-50 overflow-y-full backdrop-blur-sm"
             onClose={closeModal}
           >
             <div className="flex items-center justify-center p-4">
