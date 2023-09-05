@@ -32,6 +32,7 @@ const MatchDetails: React.FC<{ id: number }> = ({ id }) => {
   // Function to fetch the user preferences
   const matchDetail = async () => {
     const authToken = localStorage.getItem("authToken");
+    console.log("Clicked");
     try {
       const response = await fetch(`${API_ENDPOINT}/matches/${id}`, {
         method: "GET",
@@ -58,13 +59,30 @@ const MatchDetails: React.FC<{ id: number }> = ({ id }) => {
 
   return (
     <>
-      <button
-        type="button"
-        onClick={openModal}
-        className="rounded-lg px-2 py-1 text-sm font-medium bg-gray-700 text-white hover:text-blue-60"
-      >
-        Read More
-      </button>
+      <h1>
+        {matchData && (
+          <ul className="flex gap-4 text-md text-gray-900 justify-between mt-2">
+            {Object.entries(matchData.score).map(([team, score]) => (
+              <li key={team}>
+                {team.split(" ")[0]}: {score}
+              </li>
+            ))}
+            <button onClick={matchDetail}>
+              <i className="fa fa-refresh"></i>
+            </button>
+          </ul>
+        )}
+      </h1>
+      <div className="relative top-0 left-20">
+        <button
+          type="button"
+          onClick={openModal}
+          className="rounded-md px-1 text-md bg-gray-700 text-white hover:text-blue-60"
+        >
+          Read More
+        </button>
+      </div>
+
       <div className="p-4 m-2 absolute ">
         <Transition appear show={isModalOpen} as={Fragment}>
           <Dialog
