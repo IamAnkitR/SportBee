@@ -88,9 +88,11 @@ const MatchList: React.FC = () => {
             key={match.id}
             className="ml-2 flex-shrink-0 h-40 w-64 p-2 border-2 border-black rounded-lg"
           >
-            <div>
+            <div className="flex justify-between">
               <h2 className="text-lg font-semibold">{match.sportName}</h2>
+              {match.isRunning ? <span>🟢Live</span> : <span>🔴Ended</span>}
             </div>
+
             <div key={match.endsAt}>
               <h1 className="font-bold">{match.name.split("at")[0]}</h1>
               <div className="flex mt-2 ">
