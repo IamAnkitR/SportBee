@@ -136,10 +136,13 @@ const ArticleList: React.FC = () => {
         {state.isLoading ? (
           <div>Loading...</div>
         ) : (
-          <div className="flex flex-col">
+          <div
+            className="flex flex-col overflow-y-auto h-screen"
+            style={{ width: "1000px" }}
+          >
             {state.articles.map((article) => (
               <div key={article.id}>
-                <div className="w-8/12 flex justify-between bg-white m-2 p-2 h-48">
+                <div className="w-full flex justify-between bg-white m-2 p-2 h-48">
                   <div className="w-screen flex flex-col p-2">
                     <h1 className="font-bold text-xl">{article.sport.name}</h1>
                     <h1 className="font-semibold">{article.title}</h1>
