@@ -15,7 +15,11 @@ const isUserAuthenticated = localStorage.getItem("authToken") !== null;
 const router = createBrowserRouter([
   {
     path: "/",
-    element: <Home />,
+    element: isUserAuthenticated ? (
+      <Navigate to="/account/dashboard" replace />
+    ) : (
+      <Home />
+    ),
   },
   {
     path: "/home",

@@ -1,8 +1,9 @@
 import { Fragment, useEffect, useState } from "react";
 import { Disclosure, Menu, Transition } from "@headlessui/react";
 import { UserCircleIcon } from "@heroicons/react/24/outline";
-import Logo from "../../assets/images/sportbee-logo.png";
+import Logo from "../../assets/images/Logo.png";
 import Preferences from "../../pages/user/Preferences";
+import { Link } from "react-router-dom";
 
 type User = string | null;
 
@@ -88,11 +89,17 @@ const Appbar = () => {
   return (
     <Disclosure as="nav" className="border-b border-slate-200 bg-slate-500">
       {() => (
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+        <div className="ml-10 mr-8 max-w-8xl px-2 sm:px-6">
           <div className="flex h-16 items-center justify-between">
             <div className="flex items-center">
               <div className="flex-shrink-0">
-                <img className="h-8" src={Logo} alt="Smarter Tasks" />
+                <Link to="/">
+                  <img
+                    className="h-14 w-14 rounded-full"
+                    src={Logo}
+                    alt="Smarter Tasks"
+                  />
+                </Link>
               </div>
             </div>
 

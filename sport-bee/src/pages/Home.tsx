@@ -1,6 +1,6 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import Logo from "../assets/images/sportbee-logo.png";
+import Logo from "../assets/images/Logo.png";
 import main from "../assets/images/main.jpg";
 
 const Home = () => {
@@ -11,7 +11,7 @@ const Home = () => {
           <div className="grotesk mb-12 flex items-center justify-between py-4 px-4 sm:mx-0 sm:mb-20 sm:px-0 md:px-6">
             <div className="mt-4 inline-block pb-4 pl-8">
               <a
-                href="/home"
+                href="/"
                 className="align-middle w-6 h-8 rouunded-full font-bold text-black"
               >
                 <img src={Logo} className="w-16 h-16 rounded-full" alt="" />
@@ -19,16 +19,16 @@ const Home = () => {
             </div>
             <div>
               <h1 className="align-middle text-3xl font-bold text-black">
-                SportBee
+                SportsBee
               </h1>
             </div>
             <div className="flex items-center">
               <div className="py-1 text-right xl:inline-block">
                 <a
-                  className="bg-blue mt-2 inline-flex items-center pr-8 py-3 text-lg font-semibold tracking-tighter text-gray-800"
+                  className="mt-2 inline-flex text-lg font-semibold text-gray-800 border-2 border-black rounded-lg px-3 py-2 hover:bg-yellow-500"
                   href="/home"
                 >
-                  Continue as Guest
+                  Continue As A Guest
                 </a>
               </div>
             </div>
@@ -70,7 +70,7 @@ const Home = () => {
               </div>
               <div>
                 <h1 className="text-[2.8em] font-bold text-center text-black m-4">
-                  Join SportBee Today
+                  Join SportsBee Today
                 </h1>
               </div>
               <div className="flex flex-col text-xl text-center">
