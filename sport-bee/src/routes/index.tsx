@@ -8,12 +8,17 @@ import Content from "../pages/articles/Content";
 import Preferences from "../pages/user/Preferences";
 import ArticleList from "../pages/articles/ArticleList";
 import Notfound from "../NotFound";
+import Home from "../pages/Home";
 
 const isUserAuthenticated = localStorage.getItem("authToken") !== null;
 
 const router = createBrowserRouter([
   {
     path: "/",
+    element: <Home />,
+  },
+  {
+    path: "/home",
     element: isUserAuthenticated ? (
       <Navigate to="/account/dashboard" replace />
     ) : (
