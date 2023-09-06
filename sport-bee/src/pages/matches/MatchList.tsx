@@ -113,7 +113,12 @@ const MatchList: React.FC = () => {
               </div>
 
               <div key={match.endsAt}>
-                <h1 className="font-bold pt-1">{match.name.split("at")[0]}</h1>
+                <div className="overflow-hidden h-8">
+                  {" "}
+                  <h1 className="font-bold pt-1">
+                    {match.name.split("at")[0]}
+                  </h1>
+                </div>
                 <div>{renderMatchDetailsWithId(match.id)}</div>
               </div>
             </div>

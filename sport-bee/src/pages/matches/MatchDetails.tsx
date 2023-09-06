@@ -61,20 +61,24 @@ const MatchDetails: React.FC<{ id: number }> = ({ id }) => {
     <>
       <h1>
         {matchData && (
-          <ul className="flex gap-4 text-md text-gray-900 justify-between mt-2">
+          <ul className="flex flex-col text-xl text-gray-900 justify-between flex-wrap font-mono ">
             {Object.entries(matchData.score).map(([team, score]) => (
               <li key={team}>
                 {team.split(" ")[0]}: {score}
               </li>
             ))}
-            <button onClick={matchDetail}>
-              <i className="fa fa-refresh hover:animate-spin"></i>
-            </button>
+            <div className="absolute">
+              {matchData.isRunning && (
+                <button onClick={matchDetail}>
+                  <i className="fa fa-refresh hover:animate-spin text-green-800"></i>
+                </button>
+              )}
+            </div>
           </ul>
         )}
       </h1>
 
-      <div className="relative top-0 left-20">
+      <div className="flex justify-end items-end align-bottom">
         <button
           type="button"
           onClick={openModal}
