@@ -101,7 +101,15 @@ const MatchList: React.FC = () => {
             >
               <div className="flex justify-between">
                 <h2 className="text-lg font-semibold">{match.sportName}</h2>
-                {match.isRunning ? <span>🟢Live</span> : <span>🔴Ended</span>}
+                {match.isRunning ? (
+                  <span>
+                    <span className="animate-ping">🟢</span>Live
+                  </span>
+                ) : (
+                  <span>
+                    <span className="animate-pulse">🔴</span>Ended
+                  </span>
+                )}
               </div>
 
               <div key={match.endsAt}>

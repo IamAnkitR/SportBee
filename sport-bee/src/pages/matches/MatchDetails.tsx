@@ -68,7 +68,7 @@ const MatchDetails: React.FC<{ id: number }> = ({ id }) => {
               </li>
             ))}
             <button onClick={matchDetail}>
-              <i className="fa fa-refresh"></i>
+              <i className="fa fa-refresh hover:animate-spin"></i>
             </button>
           </ul>
         )}
