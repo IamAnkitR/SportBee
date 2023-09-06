@@ -73,6 +73,7 @@ const MatchDetails: React.FC<{ id: number }> = ({ id }) => {
           </ul>
         )}
       </h1>
+
       <div className="relative top-0 left-20">
         <button
           type="button"

@@ -1,6 +1,7 @@
 import React, { useReducer, useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { API_ENDPOINT } from "../../config/constants";
+import Skeleton from "./Skeleton";
 
 interface Article {
   sport: {
@@ -115,7 +116,10 @@ const ArticleList: React.FC = () => {
     <>
       <div>
         <div>
-          <div className="flex justify-start ml-6 pt-4 mt-1">
+          <div>
+            <h1 className=" text-2xl font-mono pt-2 ml-64">Trending News</h1>
+          </div>
+          <div className="flex justify-start ml-6 pt-2 mt-1">
             {sports.map((sport) => (
               <button
                 key={sport.id}
@@ -134,10 +138,15 @@ const ArticleList: React.FC = () => {
       </div>
       <div className="bg-gray-100 min-h-screen py-2 px-4 sm:px-6 lg:px-8">
         {state.isLoading ? (
-          <div>Loading...</div>
+          <div>
+            <Skeleton />
+            <Skeleton />
+            <Skeleton />
+            <Skeleton />
+          </div>
         ) : (
           <div
-            className="flex flex-col overflow-y-auto h-screen"
+            className="flex flex-col overflow-y-auto h-screen overflow-x-hidden"
             style={{ width: "1000px" }}
           >
             {state.articles.map((article) => (
