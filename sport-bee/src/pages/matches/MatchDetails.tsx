@@ -59,7 +59,7 @@ const MatchDetails: React.FC<{ id: number }> = ({ id }) => {
 
   return (
     <>
-      <h1>
+      <div className="relative">
         {matchData && (
           <ul className="flex flex-col text-xl text-gray-900 justify-between flex-wrap font-mono ">
             {Object.entries(matchData.score).map(([team, score]) => (
@@ -67,7 +67,7 @@ const MatchDetails: React.FC<{ id: number }> = ({ id }) => {
                 {team.split(" ")[0]}: {score}
               </li>
             ))}
-            <div className="absolute">
+            <div>
               {matchData.isRunning && (
                 <button onClick={matchDetail}>
                   <i className="fa fa-refresh hover:animate-spin text-green-800"></i>
@@ -76,16 +76,15 @@ const MatchDetails: React.FC<{ id: number }> = ({ id }) => {
             </div>
           </ul>
         )}
-      </h1>
-
-      <div className="flex justify-end items-end align-bottom">
-        <button
-          type="button"
-          onClick={openModal}
-          className="rounded-md px-1 text-md bg-gray-700 text-white hover:text-blue-60"
-        >
-          Read More
-        </button>
+        <div className="absolute right-0 top-14">
+          <button
+            type="button"
+            onClick={openModal}
+            className="rounded-md px-1 text-md bg-gray-700 text-white hover:text-blue-60"
+          >
+            Read More
+          </button>
+        </div>
       </div>
 
       <div className="p-4 m-2 absolute ">

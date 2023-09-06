@@ -34,7 +34,10 @@ const sports = [
     id: 2,
     name: "American Football",
   },
-
+  {
+    id: 3,
+    name: "Rugby",
+  },
   {
     id: 4,
     name: "Field Hockey",
@@ -117,7 +120,7 @@ const ArticleList: React.FC = () => {
       <div>
         <div>
           <div>
-            <h1 className=" text-2xl font-mono pt-2 ml-64">Trending News</h1>
+            <h1 className=" text-2xl font-mono pt-2 ml-80">Trending News</h1>
           </div>
           <div className="flex justify-start ml-6 pt-2 mt-1">
             {sports.map((sport) => (
