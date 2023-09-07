@@ -32,7 +32,6 @@ const MatchDetails: React.FC<{ id: number }> = ({ id }) => {
   // Function to fetch the user preferences
   const matchDetail = async () => {
     const authToken = localStorage.getItem("authToken");
-    console.log("Clicked");
     try {
       const response = await fetch(`${API_ENDPOINT}/matches/${id}`, {
         method: "GET",
@@ -45,7 +44,6 @@ const MatchDetails: React.FC<{ id: number }> = ({ id }) => {
       if (!response.ok) {
         throw new Error("Failed to fetch match details");
       }
-
       const data = await response.json();
       setMatchData(data);
     } catch (error) {
@@ -70,7 +68,7 @@ const MatchDetails: React.FC<{ id: number }> = ({ id }) => {
             <div>
               {matchData.isRunning && (
                 <button onClick={matchDetail}>
-                  <i className="fa fa-refresh hover:animate-spin text-green-800"></i>
+                  <i className="fa fa-refresh hover:animate-spin-slow text-green-800"></i>
                 </button>
               )}
             </div>

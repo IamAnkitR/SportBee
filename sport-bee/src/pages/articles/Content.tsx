@@ -108,7 +108,7 @@ const Content = () => {
     <div className="w-9/12 transform overflow-hidden bg-gray-900  text-white p-6 text-left shadow-xl transition-all rounded-lg m-auto">
       <div className="mx-auto p-4">
         <Link
-          to="/home"
+          to="/dashboard"
           className="text-white bg-red-600 p-1 rounded-lg border-black border-2 cursor-pointer block text-center mb-2 w-20"
         >
           Home

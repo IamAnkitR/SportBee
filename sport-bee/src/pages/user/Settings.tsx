@@ -44,6 +44,7 @@ const Settings = () => {
       console.log(userData);
 
       if (!response.ok) {
+        alert("You Entered Wrong Password");
         throw new Error("Operation failed");
       }
 
@@ -87,41 +88,64 @@ const Settings = () => {
               <div className="text-center font-semibold text-3xl font-mono p-8">
                 Upadte Your Password
               </div>
-              <div className="border-2 border-black rounded-xl h-32 w-7/12 overflow-hidden text-2xl text-center items-center mx-auto">
+              <div className="border-2 border-black rounded-xl h-[8em] w-[15em] overflow-hidden text-2xl text-center items-center mx-auto p-4">
                 <div>
                   <form onSubmit={handleSubmit(onSubmit)}>
-                    <label htmlFor="current_password" className="font-mono ">
-                      Old Password
-                    </label>
-                    <input
-                      type="text"
-                      id="current_password"
-                      autoFocus
-                      {...register("current_password", { required: true })}
-                      className={`bg-gray-400 w-48 leading-tight focus:outline-none focus:border-blue-500 focus:shadow-outline-blue ${
-                        errors.current_password ? "border-red-500" : " "
-                      }`}
-                    />
-                    {errors.current_password && (
-                      <span>This field is required</span>
-                    )}
-                    <label htmlFor="new_password" className="font-mono ">
-                      New Password
-                    </label>
-                    <input
-                      type="text"
-                      id="new_password"
-                      autoFocus
-                      {...register("new_password", { required: true })}
-                      className={`bg-gray-400 w-48 leading-tight focus:outline-none focus:border-blue-500 focus:shadow-outline-blue ${
-                        errors.new_password ? "border-red-500" : " "
-                      }`}
-                    />
-                    {errors.new_password && <span>This field is required</span>}
+                    <div>
+                      <div className="flex mb-2 ">
+                        <label
+                          htmlFor="current_password"
+                          className="font-mono text-xl"
+                        >
+                          Old Password
+                        </label>
+                        <input
+                          type="text"
+                          id="current_password"
+                          autoFocus
+                          {...register("current_password", { required: true })}
+                          className={`bg-gray-400 w-48 leading-tight focus:outline-none focus:border-blue-500 focus:shadow-outline-blue rounded-lg text-xl${
+                            errors.current_password ? "border-red-500" : " "
+                          }`}
+                        />
+                      </div>
+                      <div>
+                        {errors.current_password && (
+                          <span className="text-xl text-red-600">
+                            This field is required
+                          </span>
+                        )}
+                      </div>
+
+                      <div className="flex">
+                        <label
+                          htmlFor="new_password"
+                          className="font-mono text-xl"
+                        >
+                          New Password
+                        </label>
+                        <input
+                          type="text"
+                          id="new_password"
+                          autoFocus
+                          {...register("new_password", { required: true })}
+                          className={`bg-gray-400 w-48 leading-tight focus:outline-none focus:border-blue-500 focus:shadow-outline-blue rounded-lg text-xl ${
+                            errors.new_password ? "border-red-500" : " "
+                          }`}
+                        />
+                      </div>
+                      <div>
+                        {errors.new_password && (
+                          <span className="text-xl text-red-600">
+                            This field is required
+                          </span>
+                        )}
+                      </div>
+                    </div>
 
                     <button
                       type="submit"
-                      className="w-full bg-gray-700 hover:bg-gray-800 text-white font-semibold py-2 px-4 rounded-md focus:outline-none focus:shadow-outline-gray mt-4"
+                      className="bg-gray-700 hover:bg-gray-800 text-white font-semibold  px-2 rounded-md focus:outline-none focus:shadow-outline-gray mt-2 "
                     >
                       Save
                     </button>
