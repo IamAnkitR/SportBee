@@ -18,7 +18,7 @@ const userNavigation: MenuItem[] = [
 ];
 
 const signedInUserNavigation: MenuItem[] = [
-  { name: "Profile", href: "#" },
+  { name: "Profile", href: "/home" },
   { name: "Sign out", href: "/logout" },
 ];
 

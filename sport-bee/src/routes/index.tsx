@@ -9,6 +9,7 @@ import Preferences from "../pages/user/Preferences";
 import ArticleList from "../pages/articles/ArticleList";
 import Notfound from "../NotFound";
 import Home from "../pages/Home";
+import Settings from "../pages/user/Settings";
 
 const isUserAuthenticated = localStorage.getItem("authToken") !== null;
 
@@ -23,6 +24,10 @@ const router = createBrowserRouter([
   },
   {
     path: "/home",
+    element: <Home />,
+  },
+  {
+    path: "/dashboard",
     element: isUserAuthenticated ? (
       <Navigate to="/account/dashboard" replace />
     ) : (
@@ -61,6 +66,14 @@ const router = createBrowserRouter([
     path: "/account",
     children: [
       { index: true, element: <Navigate to="/account/dashboard" replace /> },
+      {
+        path: "settings",
+        element: (
+          <ProtectedRoute>
+            <Settings />
+          </ProtectedRoute>
+        ),
+      },
       {
         path: "dashboard",
         element: (
