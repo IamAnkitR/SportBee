@@ -20,7 +20,8 @@ interface State {
   selectedSport: number;
   selectedTeam: string;
   sports: { id: number; name: string }[];
-  teams: { id: number; name: string }[];
+  teams: { id: number; name: string; plays: string }[];
+  filteredTeams: { id: number; name: string; plays: string }[];
 }
 
 interface Action {
@@ -68,6 +69,11 @@ const Favourites = () => {
           ...state,
           teams: action.payload,
         };
+      case "SET_FILTERED_TEAMS":
+        return {
+          ...state,
+          filteredTeams: action.payload,
+        };
       default:
         return state;
     }
@@ -80,6 +86,7 @@ const Favourites = () => {
     selectedTeam: "",
     sports: [],
     teams: [],
+    filteredTeams: [],
   });
 
   // Fetch sports and teams when the component mounts
@@ -255,6 +262,20 @@ const Favourites = () => {
     dispatch({ type: "API_CALL_END", payload: filteredArticles });
   };
 
+  // Filter teams by sport
+  const filterTeamsBySport = () => {
+    const selectedSportName = state.sports.find(
+      (sport) => sport.id === state.selectedSport
+    )?.name;
+    const filteredTeams = state.teams.filter(
+      (team) => team.plays === selectedSportName
+    );
+    dispatch({ type: "SET_FILTERED_TEAMS", payload: filteredTeams });
+  };
+  useEffect(() => {
+    filterTeamsBySport();
+  }, [state.selectedSport, state.sports]);
+
   useEffect(() => {
     filterArticles();
   }, [state.selectedSport]);
@@ -285,7 +306,6 @@ const Favourites = () => {
                   .includes(state.selectedTeam.toLowerCase())
               ))
         );
-        console.log(filteredArticles);
         dispatch({ type: "API_CALL_END", payload: filteredArticles });
       } catch (error) {
         console.log("Error fetching articles:", error);
@@ -335,7 +355,7 @@ const Favourites = () => {
             className="h-10 bg-gray-300 rounded-xl ml-6 my-2 border-2 border-black"
           >
             <option value="">All Teams</option>
-            {state.teams.map((team) => (
+            {state.filteredTeams.map((team) => (
               <option key={team.id} value={team.name}>
                 {team.name}
               </option>
