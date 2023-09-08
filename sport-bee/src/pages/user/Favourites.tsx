@@ -347,7 +347,7 @@ const Favourites = () => {
         {state.isLoading ? (
           <div>Loading...</div>
         ) : (
-          <div className="bg-inherit overflow-y-auto h-screen">
+          <div className="bg-inherit ">
             {state.articles.map((article) => (
               <div key={article.id} className="bg-gray-300 p-4 m-2 rounded-lg">
                 <h2 className="font-semibold text-lg">{article.sport.name}</h2>

@@ -149,7 +149,7 @@ const ArticleList: React.FC = () => {
           </div>
         ) : (
           <div
-            className="flex flex-col overflow-y-auto h-screen overflow-x-hidden"
+            className="flex flex-col overflow-x-hidden"
             style={{ width: "1000px" }}
           >
             {state.articles.map((article) => (
@@ -168,8 +168,8 @@ const ArticleList: React.FC = () => {
                         })}
                       </p>
                       <Link to={`/articles/${article.id}`}>
-                        <button className="rounded-md bg-blue-600 px-4 py-2 m-2 text-sm font-medium text-white hover:bg-opacity-95 focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75">
-                          Read More...
+                        <button className="rounded-md bg-gray-700 px-4 py-2 m-2 text-sm font-medium text-white hover:bg-opacity-95 focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75">
+                          Read More
                         </button>
                       </Link>
                     </span>
