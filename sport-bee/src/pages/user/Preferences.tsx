@@ -7,10 +7,10 @@ const Preferences = () => {
   const Naviagate = useNavigate();
   const [selectedPreferences, setSelectedPreferences] = useState({
     basketball: false,
-    americanFootball: false,
+    americanfootball: false,
     Rugby: false,
-    fieldHockey: false,
-    tableTennis: false,
+    fieldhockey: false,
+    tabletennis: false,
     cricket: false,
   });
 

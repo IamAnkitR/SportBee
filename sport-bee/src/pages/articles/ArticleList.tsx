@@ -83,8 +83,35 @@ const ArticleList: React.FC = () => {
 
   const [selectedSport, setSelectedSport] = useState(1);
 
+  const [userPreferences, setUserPreferences] = useState<{
+    [key: string]: boolean;
+  }>({});
+
+  const fetchUserPreferences = async () => {
+    const authToken = localStorage.getItem("authToken");
+    try {
+      const response = await fetch(`${API_ENDPOINT}/user/preferences`, {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${authToken}`,
+        },
+      });
+
+      if (!response.ok) {
+        throw new Error("Failed to fetch user preferences");
+      }
+
+      const preferences = await response.json();
+      setUserPreferences(preferences.preferences);
+    } catch (error) {
+      console.error("Error fetching user preferences:", error);
+    }
+  };
+
   useEffect(() => {
     fetchArticles(selectedSport);
+    fetchUserPreferences();
   }, [selectedSport]);
 
   const handleSelectSport = (sportId: number) => {
@@ -115,27 +142,52 @@ const ArticleList: React.FC = () => {
     }
   };
 
+  const authToken = localStorage.getItem("authToken");
+
   return (
     <>
       <div>
         <div>
           <div>
-            <h1 className=" text-2xl font-mono pt-2 ml-80">Trending News</h1>
+            <h1 className="text-2xl font-mono pt-2 ml-80">Trending News</h1>
           </div>
           <div className="flex justify-start ml-6 pt-2 mt-1">
-            {sports.map((sport) => (
-              <button
-                key={sport.id}
-                className={
-                  selectedSport === sport.id
-                    ? "active border-2 p-2 m-2 ml-6 border-gray-400 rounded-lg bg-gray-400"
-                    : "p-2 m-2 bg-gray-300 rounded-lg ml-6"
-                }
-                onClick={() => handleSelectSport(sport.id)}
-              >
-                {sport.name}
-              </button>
-            ))}
+            {authToken ? (
+              <h1 className="p-2 m-2 font-semibold rounded-lg ml-6 border-2 border-yellow-300">
+                Your News
+              </h1>
+            ) : (
+              ""
+            )}
+            {sports.map((sport) => {
+              const sportKey = sport.name.split(" ").join("").toLowerCase();
+              const userPreference = userPreferences[sportKey];
+
+              // Check if the user is signed out or the preference is empty
+
+              const isSignedOutOrEmptyPreference =
+                !authToken || Object.keys(userPreferences).length === 0;
+
+              // Render the button only if it is visible based on preferences or if user is signed out/empty preference
+              if (userPreference || isSignedOutOrEmptyPreference) {
+                return (
+                  <button
+                    key={sport.id}
+                    className={
+                      selectedSport === sport.id
+                        ? "active border-2 p-2 m-2 ml-6 border-gray-400 rounded-lg bg-gray-400"
+                        : "p-2 m-2 bg-gray-300 rounded-lg ml-6"
+                    }
+                    onClick={() => handleSelectSport(sport.id)}
+                  >
+                    {sport.name}
+                  </button>
+                );
+              } else {
+                // Return null for buttons that are not visible
+                return null;
+              }
+            })}
           </div>
         </div>
       </div>
@@ -168,7 +220,7 @@ const ArticleList: React.FC = () => {
                         })}
                       </p>
                       <Link to={`/articles/${article.id}`}>
-                        <button className="rounded-md bg-gray-700 px-4 py-2 m-2 text-sm font-medium text-white hover:bg-opacity-95 focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75">
+                        <button className="rounded-md bg-gray-700 px-4 py-2 m-2 text-sm font-medium text-white hover-bg-opacity-95 focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75">
                           Read More
                         </button>
                       </Link>

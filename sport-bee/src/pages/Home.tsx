@@ -19,12 +19,9 @@ const Home = () => {
           <header className="bg-gray-300 h-28">
             <div className="grotesk mb-12 flex items-center justify-between py-4 px-4 sm:mx-0 sm:mb-20 sm:px-0 md:px-6">
               <div className="mt-4 inline-block pb-4 pl-8">
-                <a
-                  href="/"
-                  className="align-middle w-6 h-8 rounded-full font-bold text-black"
-                >
+                <Link to="/">
                   <img src={Logo} className="w-16 h-16 rounded-full" alt="" />
-                </a>
+                </Link>
               </div>
               <div>
                 <h1 className="align-middle text-3xl font-bold text-black">
@@ -135,12 +132,9 @@ const Home = () => {
           <header className="bg-gray-300 h-28">
             <div className="grotesk mb-12 flex justify-between items-center py-4 px-4 sm:mx-0 sm:mb-20 sm:px-0 md:px-6">
               <div className="mt-4 inline-block pb-4 pl-8">
-                <a
-                  href="/"
-                  className="align-middle w-6 h-8 rouunded-full font-bold text-black"
-                >
+                <Link to="/">
                   <img src={Logo} className="w-16 h-16 rounded-full" alt="" />
-                </a>
+                </Link>
               </div>
               <div>
                 <h1 className="align-middle text-3xl font-bold text-black">
