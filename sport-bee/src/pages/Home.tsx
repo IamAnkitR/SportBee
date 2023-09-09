@@ -77,24 +77,51 @@ const Home = () => {
                     </li>
                   </ul>
                 </div>
-                <div>
-                  <h1 className="text-[2.8em] font-bold text-center text-black m-4">
-                    Join SportsBee Today
+
+                <div className="text-xl text-center font-semibold mt-10 flex ">
+                  <h1 className="text-[1.8em] font-bold text-center text-black m-4 pb-3">
+                    Join SportsBee
                   </h1>
-                </div>
-                <div className="flex flex-col text-xl text-center">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    strokeWidth="1.5"
+                    stroke="currentColor"
+                    className="w-10 h-10 mt-4"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      d="M17.25 8.25L21 12m0 0l-3.75 3.75M21 12H3"
+                    />
+                  </svg>
                   <Link to="/signup">
-                    <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+                    <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 ml-4 mt-2 rounded">
                       Sign Up
                     </button>
                   </Link>
                 </div>
-                <div className="text-xl text-center font-semibold mt-10">
-                  <h1 className="text-[1.8em] font-bold text-center text-black m-4">
+                <div className="text-xl text-center font-semibold mt-10 flex ">
+                  <h1 className="text-[1.8em] font-bold text-center text-black m-4 pb-3">
                     Already A User
                   </h1>
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    strokeWidth="1.5"
+                    stroke="currentColor"
+                    className="w-10 h-10 mt-4"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      d="M17.25 8.25L21 12m0 0l-3.75 3.75M21 12H3"
+                    />
+                  </svg>
                   <Link to="/signin">
-                    <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+                    <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded ml-4 mt-2">
                       Sign In
                     </button>
                   </Link>
