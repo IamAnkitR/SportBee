@@ -1,4 +1,4 @@
-import { useEffect, useState, Fragment } from "react";
+import { useState, Fragment } from "react";
 import { API_ENDPOINT } from "../../config/constants";
 
 import { useNavigate } from "react-router-dom";
@@ -8,7 +8,7 @@ const Preferences = () => {
   const [selectedPreferences, setSelectedPreferences] = useState({
     basketball: false,
     americanfootball: false,
-    Rugby: false,
+    rugby: false,
     fieldhockey: false,
     tabletennis: false,
     cricket: false,
@@ -34,35 +34,9 @@ const Preferences = () => {
       ...prevSelectedPreferences,
       [sport]: event.target.checked,
     }));
-    console.log("clicked");
   };
 
-  // Function to fetch the user preferences
-  const userPrefrences = async () => {
-    const authToken = localStorage.getItem("authToken");
-    try {
-      const response = await fetch(`${API_ENDPOINT}/user/preferences`, {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${authToken}`,
-        },
-      });
-
-      if (!response.ok) {
-        throw new Error("Failed to save preferences");
-      }
-
-      const responseData = await response.json();
-      console.log("User Preferences are:", responseData);
-    } catch (error) {
-      console.error("Error saving preferences:", error);
-    }
-  };
-  useEffect(() => {
-    userPrefrences();
-  }, [selectedPreferences]);
-
+  // Function to update the user preferences
   const handleSave = async () => {
     const authToken = localStorage.getItem("authToken");
     try {

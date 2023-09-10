@@ -1,5 +1,6 @@
 import React, { useEffect, useReducer } from "react";
 import { API_ENDPOINT } from "../../config/constants";
+import NODATA from "../../assets/images/NODATa.webp";
 
 interface Article {
   sport: {
@@ -332,6 +333,7 @@ const Favourites = () => {
                 type: "SELECT_SPORT",
                 payload: parseInt(e.target.value),
               });
+              dispatch({ type: "SELECT_TEAM", payload: "" }); // Reset team to ALL TEAMS
             }}
             className="h-10 bg-gray-300 rounded-xl ml-6 mt-2 border-2 border-black"
           >
@@ -367,20 +369,37 @@ const Favourites = () => {
         {state.isLoading ? (
           <div>Loading...</div>
         ) : (
-          <div className="bg-inherit ">
-            {state.articles.map((article) => (
-              <div key={article.id} className="bg-gray-300 p-4 m-2 rounded-lg">
-                <h2 className="font-semibold text-lg">{article.sport.name}</h2>
-                <h2 className="text-lg">{article.title}</h2>
-
-                <p className="bg-gray-200 p-2 rounded-lg relative">
-                  {article.summary.slice(0, 130)}...
-                  <button className="absolute right-0 rounded-md px-1 text-md bg-gray-700 text-white hover:text-blue-60 mr-3">
-                    Read More
-                  </button>
-                </p>
+          <div>
+            {state.articles.length === 0 ? (
+              <div className="flex justify-center items-center h-11/12 w-11/12">
+                <img
+                  src={NODATA}
+                  className="mix-blend-multiply"
+                  alt="No data available"
+                />
               </div>
-            ))}
+            ) : (
+              <div className="bg-inherit">
+                {state.articles.map((article) => (
+                  <div
+                    key={article.id}
+                    className="bg-gray-300 p-4 m-2 rounded-lg"
+                  >
+                    <h2 className="font-semibold text-lg">
+                      {article.sport.name}
+                    </h2>
+                    <h2 className="text-lg">{article.title}</h2>
+
+                    <p className="bg-gray-200 p-2 rounded-lg relative">
+                      {article.summary.slice(0, 130)}...
+                      <button className="absolute right-0 rounded-md px-1 text-md bg-gray-700 text-white hover:text-blue-60 mr-3">
+                        Read More
+                      </button>
+                    </p>
+                  </div>
+                ))}
+              </div>
+            )}
           </div>
         )}
       </div>

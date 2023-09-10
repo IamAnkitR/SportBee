@@ -2,6 +2,7 @@ import React, { useReducer, useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { API_ENDPOINT } from "../../config/constants";
 import Skeleton from "./Skeleton";
+import NODATA from "../../assets/images/NODATa.webp";
 
 interface Article {
   sport: {
@@ -76,6 +77,7 @@ const reducer = (state: State, action: Action): State => {
 };
 
 const ArticleList: React.FC = () => {
+  const authToken = localStorage.getItem("authToken") || "";
   const [state, dispatch] = useReducer(reducer, {
     articles: [],
     isLoading: true,
@@ -88,7 +90,6 @@ const ArticleList: React.FC = () => {
   }>({});
 
   const fetchUserPreferences = async () => {
-    const authToken = localStorage.getItem("authToken");
     try {
       const response = await fetch(`${API_ENDPOINT}/user/preferences`, {
         method: "GET",
@@ -110,12 +111,16 @@ const ArticleList: React.FC = () => {
   };
 
   useEffect(() => {
+    if (authToken) {
+      fetchUserPreferences();
+    }
+  }, [authToken]);
+
+  useEffect(() => {
     fetchArticles(selectedSport);
-    fetchUserPreferences();
   }, [selectedSport]);
 
   const handleSelectSport = (sportId: number) => {
-    console.log(sportId);
     setSelectedSport(sportId);
   };
 
@@ -142,8 +147,6 @@ const ArticleList: React.FC = () => {
     }
   };
 
-  const authToken = localStorage.getItem("authToken");
-
   return (
     <>
       <div>
@@ -162,13 +165,9 @@ const ArticleList: React.FC = () => {
             {sports.map((sport) => {
               const sportKey = sport.name.split(" ").join("").toLowerCase();
               const userPreference = userPreferences[sportKey];
-
-              // Check if the user is signed out or the preference is empty
-
               const isSignedOutOrEmptyPreference =
                 !authToken || Object.keys(userPreferences).length === 0;
 
-              // Render the button only if it is visible based on preferences or if user is signed out/empty preference
               if (userPreference || isSignedOutOrEmptyPreference) {
                 return (
                   <button
@@ -204,38 +203,50 @@ const ArticleList: React.FC = () => {
             className="flex flex-col overflow-x-hidden"
             style={{ width: "1000px" }}
           >
-            {state.articles.map((article) => (
-              <div key={article.id}>
-                <div className="w-full flex justify-between bg-white m-2 p-2 h-48">
-                  <div className="w-screen flex flex-col p-2">
-                    <h1 className="font-bold text-xl">{article.sport.name}</h1>
-                    <h1 className="font-semibold">{article.title}</h1>
-                    <p>{article.summary.slice(0, 100) + "..."}</p>
-                    <span className="flex justify-between mt-4">
-                      <p className="flex justify-start">
-                        {new Date(article.date).toLocaleString("en-CA", {
-                          day: "numeric",
-                          month: "short",
-                          year: "numeric",
-                        })}
-                      </p>
-                      <Link to={`/articles/${article.id}`}>
-                        <button className="rounded-md bg-gray-700 px-4 py-2 m-2 text-sm font-medium text-white hover-bg-opacity-95 focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75">
-                          Read More
-                        </button>
-                      </Link>
-                    </span>
-                  </div>
-                  <div className="w-8/12 h-48 flex justify-center p-2">
-                    <img
-                      className="h-40 w-10/12 static border-4 rounded-xl border-gray-300"
-                      src={article.thumbnail}
-                      alt=""
-                    />
+            {state.articles.length === 0 ? (
+              <div className="flex justify-center items-center h-11/12 w-11/12">
+                <img
+                  src={NODATA}
+                  className="mix-blend-multiply"
+                  alt="No data available"
+                />
+              </div>
+            ) : (
+              state.articles.map((article) => (
+                <div key={article.id}>
+                  <div className="w-full flex justify-between bg-white m-2 p-2 h-48">
+                    <div className="w-screen flex flex-col p-2">
+                      <h1 className="font-bold text-xl">
+                        {article.sport.name}
+                      </h1>
+                      <h1 className="font-semibold">{article.title}</h1>
+                      <p>{article.summary.slice(0, 100) + "..."}</p>
+                      <span className="flex justify-between mt-4">
+                        <p className="flex justify-start">
+                          {new Date(article.date).toLocaleString("en-CA", {
+                            day: "numeric",
+                            month: "short",
+                            year: "numeric",
+                          })}
+                        </p>
+                        <Link to={`/articles/${article.id}`}>
+                          <button className="rounded-md bg-gray-700 px-4 py-2 m-2 text-sm font-medium text-white hover-bg-opacity-95 focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75">
+                            Read More
+                          </button>
+                        </Link>
+                      </span>
+                    </div>
+                    <div className="w-8/12 h-48 flex justify-center p-2">
+                      <img
+                        className="h-40 w-10/12 static border-4 rounded-xl border-gray-300"
+                        src={article.thumbnail}
+                        alt=""
+                      />
+                    </div>
                   </div>
                 </div>
-              </div>
-            ))}
+              ))
+            )}
           </div>
         )}
       </div>
