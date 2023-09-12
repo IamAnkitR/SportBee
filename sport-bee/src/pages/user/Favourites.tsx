@@ -106,7 +106,9 @@ const Favourites = () => {
   }, [state.selectedSport, state.selectedTeam]);
 
   useEffect(() => {
-    fetchUserPreferences();
+    if (authToken) {
+      fetchUserPreferences();
+    }
   }, []);
 
   const fetchUserPreferences = async () => {

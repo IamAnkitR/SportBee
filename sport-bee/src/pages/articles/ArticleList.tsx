@@ -77,7 +77,7 @@ const reducer = (state: State, action: Action): State => {
 };
 
 const ArticleList: React.FC = () => {
-  const authToken = localStorage.getItem("authToken") || "";
+  const authToken = localStorage.getItem("authToken");
   const [state, dispatch] = useReducer(reducer, {
     articles: [],
     isLoading: true,
@@ -106,7 +106,6 @@ const ArticleList: React.FC = () => {
       }
 
       const preferences = await response.json();
-      console.log(preferences);
       setUserPreferences(preferences.preferences || {});
     } catch (error) {
       console.error("Error fetching user preferences:", error);

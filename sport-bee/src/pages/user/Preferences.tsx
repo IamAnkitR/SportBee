@@ -133,6 +133,7 @@ const Preferences = () => {
     }
 
     navigate("../");
+    window.location.reload();
   };
 
   return (

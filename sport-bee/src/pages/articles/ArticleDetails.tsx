@@ -89,7 +89,7 @@ const ArticleDetails: React.FC<{ id: number }> = ({ id }) => {
                 {articleData.summary}
               </p>
               <p className="text-gray-700 max-h-[6rem] overflow-hidden">
-                {articleData.content}
+                {articleData.content.slice(0, 150) + "..."}
               </p>
               <div className="flex justify-end mr-4">
                 <button
