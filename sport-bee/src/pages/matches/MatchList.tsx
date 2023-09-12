@@ -70,6 +70,9 @@ const MatchList: React.FC = () => {
         },
       });
       const data = await response.json();
+      data.matches.sort((a: Match, b: Match) =>
+        a.isRunning === b.isRunning ? 0 : a.isRunning ? -1 : 1
+      );
       dispatch({ type: "API_CALL_END", payload: data.matches });
     } catch (error) {
       console.log("Error fetching articles:", error);
