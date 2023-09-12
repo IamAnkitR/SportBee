@@ -93,7 +93,7 @@ const Favourites = () => {
 
   const [userPreferences, setUserPreferences] = useState<{
     sportPreferences: { name: string }[];
-    teamPreferences: string[];
+    teamPreferences: { name: string }[];
   }>({
     sportPreferences: [], //initial values
     teamPreferences: [],
@@ -284,11 +284,21 @@ const Favourites = () => {
             className="h-10 bg-gray-300 rounded-xl ml-6 my-2 border-2 border-black"
           >
             <option value="">All Teams</option>
-            {state.filteredTeams.map((team) => (
-              <option key={team.id} value={team.name}>
-                {team.name}
-              </option>
-            ))}
+            {state.filteredTeams.map((team) => {
+              const isTeamInPreferences = userPreferences.teamPreferences.some(
+                (pref) => pref.name === team.name
+              );
+
+              if (isTeamInPreferences) {
+                return (
+                  <option key={team.id} value={team.name}>
+                    {team.name}
+                  </option>
+                );
+              }
+
+              return null; // Exclude teams that are not in preferences
+            })}
           </select>
         </div>
       </div>
