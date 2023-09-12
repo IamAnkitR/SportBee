@@ -91,8 +91,11 @@ const Favourites = () => {
     filteredTeams: [],
   });
 
-  const [userPreferences, setUserPreferences] = useState({
-    sportPreferences: [],
+  const [userPreferences, setUserPreferences] = useState<{
+    sportPreferences: { name: string }[];
+    teamPreferences: string[];
+  }>({
+    sportPreferences: [], //initial values
     teamPreferences: [],
   });
 

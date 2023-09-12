@@ -26,7 +26,7 @@ interface Action {
   payload?: Article[];
 }
 
-const sports = [
+const sports: { id: number; name: string }[] = [
   {
     id: 1,
     name: "Basketball",
@@ -82,12 +82,14 @@ const ArticleList: React.FC = () => {
     articles: [],
     isLoading: true,
   });
-
-  const [selectedSport, setSelectedSport] = useState(1);
-
   const [userPreferences, setUserPreferences] = useState<{
-    [key: string]: boolean;
-  }>({});
+    sportPreferences: { name: string }[];
+    teamPreferences: string[];
+  }>({
+    sportPreferences: [], //initial values
+    teamPreferences: [],
+  });
+  const [selectedSport, setSelectedSport] = useState(1);
 
   const fetchUserPreferences = async () => {
     try {
@@ -153,8 +155,8 @@ const ArticleList: React.FC = () => {
       if (userPreferences.sportPreferences) {
         // Check if the sportName is in the user's sport preferences
         return (
-          userPreferences.sportPreferences.length === 0 ||
-          userPreferences.sportPreferences.some(
+          userPreferences.sportPreferences?.length === 0 ||
+          userPreferences.sportPreferences?.some(
             (pref) => pref.name === sportName
           )
         );
