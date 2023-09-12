@@ -1,6 +1,7 @@
-import React, { useEffect, useReducer } from "react";
+import { useEffect, useReducer, useState } from "react";
 import { API_ENDPOINT } from "../../config/constants";
 import NODATA from "../../assets/images/NODATa.webp";
+import ArticleDetails from "../articles/ArticleDetails";
 
 interface Article {
   sport: {
@@ -90,189 +91,84 @@ const Favourites = () => {
     filteredTeams: [],
   });
 
+  const [userPreferences, setUserPreferences] = useState({
+    sportPreferences: [],
+    teamPreferences: [],
+  });
+
   // Fetch sports and teams when the component mounts
   useEffect(() => {
     fetchSports();
     fetchTeams();
+  }, [state.selectedSport, state.selectedTeam]);
+
+  useEffect(() => {
+    fetchUserPreferences();
   }, []);
 
+  const fetchUserPreferences = async () => {
+    try {
+      const token = localStorage.getItem("authToken") || "";
+      const response = await fetch(`${API_ENDPOINT}/user/preferences`, {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      const data = await response.json();
+      dispatch({
+        type: "SELECT_SPORT",
+        payload: data.preferences.sportPreferences[0]?.id || 1,
+      });
+      dispatch({
+        type: "SELECT_TEAM",
+        payload: data.preferences.teamPreferences[0]?.name || "",
+      });
+      setUserPreferences(data.preferences);
+    } catch (error) {
+      console.error("Error fetching user preferences:", error);
+    }
+  };
+
   const fetchSports = async () => {
-    const sportsData = [
-      {
-        id: 1,
-        name: "Basketball",
-      },
-      {
-        id: 2,
-        name: "American Football",
-      },
-      {
-        id: 3,
-        name: "Rugby",
-      },
-      {
-        id: 4,
-        name: "Field Hockey",
-      },
-      {
-        id: 5,
-        name: "Table Tennis",
-      },
-      {
-        id: 6,
-        name: "Cricket",
-      },
-    ];
-    dispatch({ type: "SET_SPORTS", payload: sportsData });
+    try {
+      const response = await fetch(`${API_ENDPOINT}/sports`);
+      const data = await response.json();
+      dispatch({ type: "SET_SPORTS", payload: data.sports });
+    } catch (error) {
+      console.error("Error fetching sports:", error);
+    }
   };
 
   const fetchTeams = async () => {
-    const teamsData = [
-      {
-        id: 1,
-        name: "Thunderbolts",
-        plays: "Basketball",
-      },
-      {
-        id: 2,
-        name: "Dragonslayers",
-        plays: "Basketball",
-      },
-      {
-        id: 3,
-        name: "Phoenix Rising",
-        plays: "Basketball",
-      },
-      {
-        id: 4,
-        name: "Avalanche",
-        plays: "Basketball",
-      },
-      {
-        id: 5,
-        name: "Titans",
-        plays: "American Football",
-      },
-      {
-        id: 6,
-        name: "Vortex Vipers",
-        plays: "American Football",
-      },
-      {
-        id: 7,
-        name: "Spectral Shadows",
-        plays: "American Football",
-      },
-      {
-        id: 8,
-        name: "Blitzkrieg",
-        plays: "American Football",
-      },
-      {
-        id: 9,
-        name: "Fury United",
-        plays: "Rugby",
-      },
-      {
-        id: 10,
-        name: "Lightning Strikes",
-        plays: "Rugby",
-      },
-      {
-        id: 11,
-        name: "Serpents of Fire",
-        plays: "Rugby",
-      },
-      {
-        id: 12,
-        name: "Galaxy Warriors",
-        plays: "Rugby",
-      },
-      {
-        id: 13,
-        name: "Stormbreakers",
-        plays: "Field Hockey",
-      },
-      {
-        id: 14,
-        name: "Enigma Enforcers",
-        plays: "Field Hockey",
-      },
-      {
-        id: 15,
-        name: "Blaze Squadron",
-        plays: "Field Hockey",
-      },
-      {
-        id: 16,
-        name: "Phantom Phantoms",
-        plays: "Field Hockey",
-      },
-      {
-        id: 17,
-        name: "Celestial Chargers",
-        plays: "Table Tennis",
-      },
-      {
-        id: 18,
-        name: "Rebel Renegades",
-        plays: "Table Tennis",
-      },
-      {
-        id: 19,
-        name: "Inferno Ignitors",
-        plays: "Table Tennis",
-      },
-      {
-        id: 20,
-        name: "Stealth Strikers",
-        plays: "Table Tennis",
-      },
-      {
-        id: 21,
-        name: "Nova Knights",
-        plays: "Cricket",
-      },
-      {
-        id: 22,
-        name: "Crimson Crushers",
-        plays: "Cricket",
-      },
-      {
-        id: 23,
-        name: "Rapid Raptors",
-        plays: "Cricket",
-      },
-      {
-        id: 24,
-        name: "Shadow Assassins",
-        plays: "Cricket",
-      },
-    ];
-    dispatch({ type: "SET_TEAMS", payload: teamsData });
+    try {
+      const response = await fetch(`${API_ENDPOINT}/teams`);
+      const data = await response.json();
+      dispatch({ type: "SET_TEAMS", payload: data });
+    } catch (error) {
+      console.error("Error fetching teams:", error);
+    }
   };
 
   const filterArticles = () => {
+    const selectedSportId = state.selectedSport;
     const filteredArticles = state.articles.filter(
-      (article: Article) =>
-        article.sport.name.toLowerCase() ===
-        state.sports
-          .find((s) => s.id === state.selectedSport)
-          ?.name.toLowerCase()
+      (article: Article) => article.sport.id === selectedSportId
     );
     dispatch({ type: "API_CALL_END", payload: filteredArticles });
   };
 
   // Filter teams by sport
   const filterTeamsBySport = () => {
-    const selectedSportName = state.sports.find(
-      (sport) => sport.id === state.selectedSport
-    )?.name;
+    const selectedSport = state.selectedSport;
     const filteredTeams = state.teams.filter(
-      (team) => team.plays === selectedSportName
+      (team) =>
+        team.plays === state.sports.find((s) => s.id === selectedSport)?.name
     );
     dispatch({ type: "SET_FILTERED_TEAMS", payload: filteredTeams });
   };
+
   useEffect(() => {
     filterTeamsBySport();
   }, [state.selectedSport, state.sports]);
@@ -317,6 +213,30 @@ const Favourites = () => {
     fetchArticles();
   }, [state.selectedSport, state.selectedTeam]);
 
+  const authToken = localStorage.getItem("authToken");
+  const shouldDisplaySport = (sportName: string): boolean => {
+    if (authToken) {
+      // Check if user has sport preferences
+      if (userPreferences.sportPreferences) {
+        // Check if the sportName is in the user's sport preferences
+        return (
+          userPreferences.sportPreferences.length === 0 ||
+          userPreferences.sportPreferences.some(
+            (pref) => pref.name === sportName
+          )
+        );
+      }
+      // If no sport preferences, display all sports
+      return true;
+    }
+    // If user is not signed in, display all sports
+    return true;
+  };
+
+  const renderArticleDetailsWithId = (id: number) => {
+    return <ArticleDetails id={id} />;
+  };
+
   return (
     <div>
       <h1 className="text-2xl font-mono pt-2 text-center">Favourites</h1>
@@ -333,15 +253,19 @@ const Favourites = () => {
                 type: "SELECT_SPORT",
                 payload: parseInt(e.target.value),
               });
-              dispatch({ type: "SELECT_TEAM", payload: "" }); // Reset team to ALL TEAMS
+              dispatch({ type: "SELECT_TEAM", payload: "" });
             }}
             className="h-10 bg-gray-300 rounded-xl ml-6 mt-2 border-2 border-black"
           >
-            {state.sports.map((sport) => (
-              <option key={sport.id} value={sport.id}>
-                {sport.name}
-              </option>
-            ))}
+            {state.sports.map(
+              (sport) =>
+                // Render the option only if it's in the user's sport preferences
+                shouldDisplaySport(sport.name) && (
+                  <option key={sport.id} value={sport.id}>
+                    {sport.name}
+                  </option>
+                )
+            )}
           </select>
         </div>
         <div>
@@ -385,17 +309,7 @@ const Favourites = () => {
                     key={article.id}
                     className="bg-gray-300 p-4 m-2 rounded-lg"
                   >
-                    <h2 className="font-semibold text-lg">
-                      {article.sport.name}
-                    </h2>
-                    <h2 className="text-lg">{article.title}</h2>
-
-                    <p className="bg-gray-200 p-2 rounded-lg relative">
-                      {article.summary.slice(0, 130)}...
-                      <button className="absolute right-0 rounded-md px-1 text-md bg-gray-700 text-white hover:text-blue-60 mr-3">
-                        Read More
-                      </button>
-                    </p>
+                    <div>{renderArticleDetailsWithId(article.id)}</div>
                   </div>
                 ))}
               </div>

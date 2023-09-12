@@ -4,7 +4,6 @@ import Signup from "../pages/signup";
 import Logout from "../pages/logout";
 import Dashboard from "../pages/dashboard";
 import ProtectedRoute from "./ProtectedRoute";
-import Content from "../pages/articles/Content";
 import Preferences from "../pages/user/Preferences";
 import ArticleList from "../pages/articles/ArticleList";
 import Notfound from "../NotFound";
@@ -45,10 +44,6 @@ const router = createBrowserRouter([
   {
     path: "/logout",
     element: <Logout />,
-  },
-  {
-    path: "/articles/:id",
-    element: <Content />,
   },
   {
     path: "/sport/:id",

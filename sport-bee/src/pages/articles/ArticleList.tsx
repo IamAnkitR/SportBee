@@ -1,8 +1,8 @@
 import React, { useReducer, useEffect, useState } from "react";
-import { Link } from "react-router-dom";
 import { API_ENDPOINT } from "../../config/constants";
 import Skeleton from "./Skeleton";
 import NODATA from "../../assets/images/NODATa.webp";
+import ArticleDetails from "./ArticleDetails";
 
 interface Article {
   sport: {
@@ -104,7 +104,8 @@ const ArticleList: React.FC = () => {
       }
 
       const preferences = await response.json();
-      setUserPreferences(preferences.preferences);
+      console.log(preferences);
+      setUserPreferences(preferences.preferences || {});
     } catch (error) {
       console.error("Error fetching user preferences:", error);
     }
@@ -147,6 +148,28 @@ const ArticleList: React.FC = () => {
     }
   };
 
+  const shouldDisplaySport = (sportName: string): boolean => {
+    if (authToken) {
+      if (userPreferences.sportPreferences) {
+        // Check if the sportName is in the user's sport preferences
+        return (
+          userPreferences.sportPreferences.length === 0 ||
+          userPreferences.sportPreferences.some(
+            (pref) => pref.name === sportName
+          )
+        );
+      }
+      return true;
+      // If no sport preferences, display all sports
+    }
+    // If user is not signed in, display all sports
+    return true;
+  };
+
+  const renderArticleDetailsWithId = (id: number) => {
+    return <ArticleDetails id={id} />;
+  };
+
   return (
     <>
       <div>
@@ -156,19 +179,17 @@ const ArticleList: React.FC = () => {
           </div>
           <div className="flex justify-start ml-6 pt-2 mt-1">
             {authToken ? (
-              <h1 className="p-2 m-2 font-semibold rounded-lg ml-6 border-2 border-yellow-300">
+              <button className="p-2 m-2 font-semibold rounded-lg ml-6 border-2 border-yellow-300">
                 Your News
-              </h1>
+              </button>
             ) : (
               ""
             )}
             {sports.map((sport) => {
-              const sportKey = sport.name.split(" ").join("").toLowerCase();
-              const userPreference = userPreferences[sportKey];
-              const isSignedOutOrEmptyPreference =
-                !authToken || Object.keys(userPreferences).length === 0;
+              const sportName = sport.name;
+              const isSportSelected = shouldDisplaySport(sportName);
 
-              if (userPreference || isSignedOutOrEmptyPreference) {
+              if (!authToken || isSportSelected) {
                 return (
                   <button
                     key={sport.id}
@@ -183,7 +204,6 @@ const ArticleList: React.FC = () => {
                   </button>
                 );
               } else {
-                // Return null for buttons that are not visible
                 return null;
               }
             })}
@@ -213,37 +233,11 @@ const ArticleList: React.FC = () => {
               </div>
             ) : (
               state.articles.map((article) => (
-                <div key={article.id}>
-                  <div className="w-full flex justify-between bg-white m-2 p-2 h-48">
-                    <div className="w-screen flex flex-col p-2">
-                      <h1 className="font-bold text-xl">
-                        {article.sport.name}
-                      </h1>
-                      <h1 className="font-semibold">{article.title}</h1>
-                      <p>{article.summary.slice(0, 100) + "..."}</p>
-                      <span className="flex justify-between mt-4">
-                        <p className="flex justify-start">
-                          {new Date(article.date).toLocaleString("en-CA", {
-                            day: "numeric",
-                            month: "short",
-                            year: "numeric",
-                          })}
-                        </p>
-                        <Link to={`/articles/${article.id}`}>
-                          <button className="rounded-md bg-gray-700 px-4 py-2 m-2 text-sm font-medium text-white hover-bg-opacity-95 focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75">
-                            Read More
-                          </button>
-                        </Link>
-                      </span>
-                    </div>
-                    <div className="w-8/12 h-48 flex justify-center p-2">
-                      <img
-                        className="h-40 w-10/12 static border-4 rounded-xl border-gray-300"
-                        src={article.thumbnail}
-                        alt=""
-                      />
-                    </div>
-                  </div>
+                <div key={article.id} className="pb-10">
+                  <h1 className="font-bold text-2xl pb-2">
+                    {article.sport.name}
+                  </h1>
+                  <div>{renderArticleDetailsWithId(article.id)}</div>
                 </div>
               ))
             )}

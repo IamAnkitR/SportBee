@@ -1,54 +1,125 @@
-import { useState, Fragment } from "react";
+import React, { useState, Fragment, useEffect } from "react";
+import { Formik, Form } from "formik";
 import { API_ENDPOINT } from "../../config/constants";
-
 import { useNavigate } from "react-router-dom";
 import { Dialog, Transition } from "@headlessui/react";
+import "../../App.css";
+
+interface Sport {
+  id: number;
+  name: string;
+}
+
+interface Team {
+  id: number;
+  name: string;
+  plays: string;
+}
+
 const Preferences = () => {
-  const Naviagate = useNavigate();
-  const [selectedPreferences, setSelectedPreferences] = useState({
-    basketball: false,
-    americanfootball: false,
-    rugby: false,
-    fieldhockey: false,
-    tabletennis: false,
-    cricket: false,
-  });
+  const navigate = useNavigate();
 
-  // defining the modal state
-  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [sportsData, setSportsData] = useState<Sport[]>([]);
+  const [teamsData, setTeamsData] = useState<Team[]>([]);
 
-  //defining the modal behaviour
-  const openModal = () => {
-    setIsModalOpen(true);
+  const fetchSports = async () => {
+    try {
+      const response = await fetch(`${API_ENDPOINT}/sports`);
+      if (!response.ok) {
+        throw new Error("Failed to fetch sports");
+      }
+      const data = await response.json();
+      setSportsData(data.sports); // Update state variable with the sports array
+    } catch (error) {
+      console.log("Error fetching sports:", error);
+    }
   };
+
+  const fetchTeams = async () => {
+    try {
+      const response = await fetch(`${API_ENDPOINT}/teams`);
+      if (!response.ok) {
+        throw new Error("Failed to fetch teams");
+      }
+      const data = await response.json();
+      setTeamsData(data); // Update state variable with the teams array
+    } catch (error) {
+      console.log("Error fetching teams:", error);
+    }
+  };
+
+  useEffect(() => {
+    fetchSports();
+    fetchTeams();
+  }, []);
+
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [selectedSports, setSelectedSports] = useState<Sport[]>([]);
+  const [selectedTeams, setSelectedTeams] = useState<Team[]>([]);
 
   const closeModal = () => {
     setIsModalOpen(false);
   };
 
-  const handleCheckboxChange = (event: {
-    target: { name: string; checked: boolean };
-  }) => {
-    const sport = event.target.name;
-    setSelectedPreferences((prevSelectedPreferences) => ({
-      ...prevSelectedPreferences,
-      [sport]: event.target.checked,
-    }));
+  const handleSportCheckboxChange = (
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    const { value, checked } = event.target;
+
+    // Find the sport with the matching name
+    const selectedSport = sportsData.find((sport) => sport.name === value);
+
+    if (checked && selectedSport) {
+      setSelectedSports((prevSports) => [...prevSports, selectedSport]);
+    } else {
+      setSelectedSports((prevSports) =>
+        prevSports.filter((sport) => sport.name !== value)
+      );
+    }
   };
 
-  // Function to update the user preferences
-  const handleSave = async () => {
+  const handleTeamCheckboxChange = (
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    const { value, checked } = event.target;
+
+    const selectedTeam = teamsData.find((team) => team.name === value);
+
+    if (checked && selectedTeam) {
+      setSelectedTeams((prevTeams) => [...prevTeams, selectedTeam]);
+    } else {
+      setSelectedTeams((prevTeams) =>
+        prevTeams.filter((team) => team.name !== value)
+      );
+    }
+  };
+
+  const handleSubmit = async () => {
+    console.log(selectedSports, selectedTeams);
+    const values = {
+      preferences: {
+        sportPreferences: selectedSports.map((sport) => ({
+          id: sport.id,
+          name: sport.name,
+        })),
+        teamPreferences: selectedTeams.map((team) => ({
+          id: team.id,
+          name: team.name,
+          plays: team.plays,
+        })),
+      },
+    };
+
     const authToken = localStorage.getItem("authToken");
     try {
+      console.log(values);
       const response = await fetch(`${API_ENDPOINT}/user/preferences`, {
         method: "PATCH",
         headers: {
           "Content-Type": "application/json",
           Authorization: `Bearer ${authToken}`,
         },
-        body: JSON.stringify({
-          preferences: selectedPreferences,
-        }),
+        body: JSON.stringify(values),
       });
 
       if (!response.ok) {
@@ -60,15 +131,16 @@ const Preferences = () => {
     } catch (error) {
       console.error("Error saving preferences:", error);
     }
-    Naviagate("../");
+
+    navigate("../");
   };
 
   return (
     <>
       <button
         type="button"
-        onClick={openModal}
-        className="rounded-full bg-gray-500 px-2 py-1 text-sm font-medium text-white hover:text-blue-600 focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75 "
+        onClick={() => setIsModalOpen(true)}
+        className="rounded-full bg-gray-500 px-2 py-1 text-sm font-medium text-white hover:text-blue-600 focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75"
         id="newProjectBtn"
       >
         <svg
@@ -91,69 +163,80 @@ const Preferences = () => {
           />
         </svg>
       </button>
-      <div className=" p-4 m-2 absolute right-0 ">
+      <div className="p-4 m-2 absolute right-0">
         <Transition appear show={isModalOpen} as={Fragment}>
           <Dialog
             as="div"
-            className="fixed inset-0 z-50 overflow-y-auto backdrop-blur-sm "
+            className="fixed inset-0 z-50 overflow-y-auto backdrop-blur-sm flex justify-center w-screen h-[80vh] mt-16"
             onClose={closeModal}
           >
-            <Transition.Child
-              as={Fragment}
-              enter="ease-out duration-300"
-              enterFrom="opacity-0"
-              enterTo="opacity-100"
-              leave="ease-in duration-200"
-              leaveFrom="opacity-100"
-              leaveTo="opacity-0"
+            <Formik
+              initialValues={{
+                preferences: {
+                  sportPreferences: [],
+                  teamPreferences: [],
+                },
+              }}
+              onSubmit={handleSubmit}
             >
-              <div className="fixed inset-0 bg-black bg-opacity-25" />
-            </Transition.Child>
-            <div className="flex min-h-screen  items-center justify-center p-4">
-              <Transition.Child
-                as={Fragment}
-                enter="ease-out duration-300"
-                enterFrom="opacity-0 scale-95"
-                enterTo="opacity-100 scale-100"
-                leave="ease-in duration-200"
-                leaveFrom="opacity-100 scale-100"
-                leaveTo="opacity-0 scale-95"
-              >
-                <Dialog.Panel className="w-full max-w-md transform overflow-hidden bg-white p-6 text-left align-middle shadow-xl transition-all rounded-lg">
+              <Form>
+                <Dialog.Panel className="w-6/12 transform overflow-hidden bg-white p-6 text-left align-middle shadow-xl transition-all rounded-lg">
                   <Dialog.Title
                     as="h3"
                     className="text-xl font-bold leading-6 text-gray-900 p-2 text-center"
                   >
-                    Choose Your Favorite Sports
+                    Select Your Preferences
+                    <hr />
                   </Dialog.Title>
-                  {Object.keys(selectedPreferences).map((sport) => (
-                    <div key={sport}>
-                      <input
-                        type="checkbox"
-                        name={sport}
-                        id={sport}
-                        onChange={handleCheckboxChange}
-                      />
-                      {sport}
-                    </div>
-                  ))}
-                  <div className="flex justify-center gap-2">
+                  {/* Sports Section */}
+                  <div>
+                    <h1 className="text-center text-xl py-3">Sports</h1>
+                    <hr />
+                    {sportsData.map((sport) => (
+                      <label key={sport.id}>
+                        <input
+                          type="checkbox"
+                          name="sportPreferences"
+                          value={sport.name}
+                          onChange={handleSportCheckboxChange}
+                        />
+                        {sport.name}
+                      </label>
+                    ))}
+                  </div>
+                  {/* Teams Section */}
+                  <div>
+                    <h1 className="text-center text-xl py-3">Teams</h1>
+                    <hr />
+                    {teamsData.map((team) => (
+                      <label key={team.id}>
+                        <input
+                          type="checkbox"
+                          name="teamPreferences"
+                          value={team.name}
+                          onChange={handleTeamCheckboxChange}
+                        />
+                        {team.name}
+                      </label>
+                    ))}
+                  </div>
+                  <div className="flex justify-center gap-2 mt-5">
                     <button
-                      className="bg-red-500 p-1 pl-2 pr-2 border-2 border-black"
-                      onClick={handleSave}
+                      className="bg-red-500 px-3 py-2 mr-2 border-2 border-black"
+                      type="submit"
                     >
                       Save
                     </button>
                     <button
-                      className="bg-red-500 p-1 pl-2 pr-2 border-2 border-black"
+                      className="bg-red-500 px-3 py-2 border-2 border-black"
                       onClick={closeModal}
                     >
                       Cancel
                     </button>
                   </div>
                 </Dialog.Panel>
-              </Transition.Child>
-            </div>
+              </Form>
+            </Formik>
           </Dialog>
         </Transition>
       </div>

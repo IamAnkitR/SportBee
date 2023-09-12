@@ -29,14 +29,9 @@ const SigninForm: React.FC = () => {
       // extract the response body as JSON data
       const userData = await response.json();
 
-      console.log(userData);
-
       if (!response.ok) {
         throw new Error("Sign-in failed");
       }
-
-      console.log("Sign-in successful");
-      console.log(userData.auth_token);
 
       //After successful signin, first we will save the token in localStorage
       localStorage.setItem("authToken", userData.auth_token);
