@@ -243,9 +243,12 @@ const Favourites = () => {
   return (
     <div>
       <h1 className="text-2xl font-mono pt-2 text-center">Favourites</h1>
-      <div className="flex">
+      <div className="flex justify-center">
         <div>
-          <label htmlFor="sportDropdown" className="font-semibold text-xl">
+          <label
+            htmlFor="sportDropdown"
+            className="font-semibold text-xl flex justify-center"
+          >
             Select Sport:
           </label>
           <select
@@ -272,7 +275,10 @@ const Favourites = () => {
           </select>
         </div>
         <div>
-          <label htmlFor="teamDropdown" className="font-semibold text-xl">
+          <label
+            htmlFor="teamDropdown"
+            className="font-semibold text-xl flex justify-center"
+          >
             Select Team:
           </label>
           <select

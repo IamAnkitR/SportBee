@@ -235,10 +235,10 @@ const ArticleList: React.FC = () => {
               </div>
             ) : (
               state.articles.map((article) => (
-                <div key={article.id} className="pb-10">
-                  <h1 className="font-bold text-2xl pb-2">
-                    {article.sport.name}
-                  </h1>
+                <div
+                  key={article.id}
+                  className="p-2 bg-gray-300 my-3 rounded-lg "
+                >
                   <div>{renderArticleDetailsWithId(article.id)}</div>
                 </div>
               ))

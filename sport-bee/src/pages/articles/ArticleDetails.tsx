@@ -69,35 +69,37 @@ const ArticleDetails: React.FC<{ id: number }> = ({ id }) => {
         {articleData && (
           <>
             <div>
-              <img
-                className="max-h-56 object-cover w-full"
-                src={articleData.thumbnail}
-                alt={articleData.title}
-              />
-            </div>
-            <h2 className="text-xl font-semibold">{articleData.title}</h2>
-            <p className="text-gray-500">
-              {" "}
-              {new Date(articleData.date).toLocaleString("en-CA", {
-                day: "numeric",
-                month: "short",
-                year: "numeric",
-              })}
-            </p>
-            <p className="text-gray-700 text-lg font-medium">
-              {articleData.summary}
-            </p>
-            <p className="text-gray-700">
-              {articleData.content.slice(0, 150) + "..."}
-            </p>
-            <div>
-              <button
-                type="button"
-                onClick={openModal}
-                className="rounded-md px-1 text-md bg-gray-700 text-white hover:text-blue-60"
-              >
-                Read More
-              </button>
+              <div>
+                <img
+                  className="max-h-56 object-cover w-full"
+                  src={articleData.thumbnail}
+                  alt={articleData.title}
+                />
+              </div>
+              <h2 className="text-xl font-semibold">{articleData.title}</h2>
+              <p className="text-gray-500">
+                {" "}
+                {new Date(articleData.date).toLocaleString("en-CA", {
+                  day: "numeric",
+                  month: "short",
+                  year: "numeric",
+                })}
+              </p>
+              <p className="text-gray-700 text-lg font-medium">
+                {articleData.summary}
+              </p>
+              <p className="text-gray-700 max-h-[6rem] overflow-hidden">
+                {articleData.content}
+              </p>
+              <div className="flex justify-end mr-4">
+                <button
+                  type="button"
+                  onClick={openModal}
+                  className="rounded-md px-2 py-1 text-md bg-gray-700 text-white hover:text-blue-60"
+                >
+                  Read More
+                </button>
+              </div>
             </div>
           </>
         )}
