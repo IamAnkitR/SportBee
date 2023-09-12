@@ -289,7 +289,7 @@ const Favourites = () => {
                 (pref) => pref.name === team.name
               );
 
-              if (isTeamInPreferences) {
+              if (isTeamInPreferences || !authToken) {
                 return (
                   <option key={team.id} value={team.name}>
                     {team.name}
