@@ -46,9 +46,8 @@ const Settings = () => {
       if (!response.ok) {
         alert("You Entered Wrong Password");
         throw new Error("Operation failed");
-      } else {
-        alert("Password Updated Successfully");
       }
+      alert("Password Updated Successfully");
 
       console.log("Updated Password successfully");
     } catch (error) {
