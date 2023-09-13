@@ -243,8 +243,10 @@ const Favourites = () => {
   };
 
   return (
-    <div>
-      <h1 className="text-2xl font-mono pt-2 text-center">Favourites</h1>
+    <div className="bg-white w-6/12">
+      <h1 className="text-2xl font-mono pt-2 text-center min-w-full">
+        Favourites
+      </h1>
       <div className="flex justify-center">
         <div>
           <label
@@ -263,7 +265,7 @@ const Favourites = () => {
               });
               dispatch({ type: "SELECT_TEAM", payload: "" });
             }}
-            className="h-10 bg-gray-300 rounded-xl ml-6 mt-2 border-2 border-black"
+            className="h-10 bg-[#F1F6F9] rounded-xl ml-6 mt-2 border-2 border-black"
           >
             {state.sports.map(
               (sport) =>
@@ -289,7 +291,7 @@ const Favourites = () => {
             onChange={(e) =>
               dispatch({ type: "SELECT_TEAM", payload: e.target.value })
             }
-            className="h-10 bg-gray-300 rounded-xl ml-6 my-2 border-2 border-black"
+            className="h-10 bg-[#F1F6F9] rounded-xl ml-6 my-2 border-2 border-black"
           >
             <option value="">All Teams</option>
             {state.filteredTeams.map((team) => {
@@ -328,7 +330,7 @@ const Favourites = () => {
                 {state.articles.map((article) => (
                   <div
                     key={article.id}
-                    className="bg-gray-300 p-4 m-2 rounded-lg"
+                    className="bg-[#F1F6F9] p-4 m-2 rounded-md"
                   >
                     <div>{renderArticleDetailsWithId(article.id)}</div>
                   </div>

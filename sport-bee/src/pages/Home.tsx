@@ -15,8 +15,8 @@ const Home = () => {
   return (
     <>
       {!authToken ? (
-        <div className="static min-h-screen flex-row justify-center bg-gray-100 ">
-          <header className="bg-gray-300 h-28">
+        <div className="static min-h-screen flex-row justify-center bg-white ">
+          <header className="bg-[#96B6C5] h-28">
             <div className="grotesk mb-12 flex items-center justify-between py-4 px-4 sm:mx-0 sm:mb-20 sm:px-0 md:px-6">
               <div className="mt-4 inline-block pb-4 pl-8">
                 <Link to="/">

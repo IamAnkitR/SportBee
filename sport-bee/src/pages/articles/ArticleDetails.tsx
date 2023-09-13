@@ -69,14 +69,9 @@ const ArticleDetails: React.FC<{ id: number }> = ({ id }) => {
         {articleData && (
           <>
             <div>
-              <div>
-                <img
-                  className="max-h-56 object-cover w-full"
-                  src={articleData.thumbnail}
-                  alt={articleData.title}
-                />
-              </div>
-              <h2 className="text-xl font-semibold">{articleData.title}</h2>
+              <h2 className="text-xl font-semibold max-h-16 overflow-hidden">
+                {articleData.title}
+              </h2>
               <p className="text-gray-500">
                 {" "}
                 {new Date(articleData.date).toLocaleString("en-CA", {
@@ -85,8 +80,9 @@ const ArticleDetails: React.FC<{ id: number }> = ({ id }) => {
                   year: "numeric",
                 })}
               </p>
+
               <p className="text-gray-700 text-lg font-medium">
-                {articleData.summary}
+                {articleData.summary.slice(0, 100) + "..."}
               </p>
               <p className="text-gray-700 max-h-[6rem] overflow-hidden">
                 {articleData.content.slice(0, 150) + "..."}
@@ -122,32 +118,50 @@ const ArticleDetails: React.FC<{ id: number }> = ({ id }) => {
                 leaveFrom="opacity-100 scale-100"
                 leaveTo="opacity-0 scale-95"
               >
-                <Dialog.Panel className="w-9/12 transform overflow-hidden bg-gray-900 text-white p-6 text-left shadow-xl transition-all rounded-lg">
+                <Dialog.Panel className="w-9/12 transform overflow-hidden bg-[#F1F6F9] p-6 text-left shadow-xl transition-all rounded-lg">
                   {articleData && (
                     <>
-                      <div className="text-center font-bold text-gray-400">
+                      <div className="text-center">
                         <Dialog.Title
                           as="h3"
-                          className="text-2xl font-bold leading-6 p-4 m-1"
+                          className="text-2xl leading-6 p-4 m-1"
                         >
                           {articleData.title}
+
+                          <p className="flex justify-end text-sm">
+                            <span className=" pr-2"></span>
+                            {new Date(articleData.date).toLocaleString(
+                              "en-CA",
+                              {
+                                day: "numeric",
+                                month: "short",
+                                year: "numeric",
+                              }
+                            )}
+                          </p>
                         </Dialog.Title>
 
-                        <p>
-                          <span className="text-gray-100 pr-2">Date: </span>
-                          {new Date(articleData.date).toLocaleString("en-CA", {
-                            day: "numeric",
-                            month: "short",
-                            year: "numeric",
-                          })}
-                        </p>
+                        <div>
+                          <img
+                            src={articleData.thumbnail}
+                            alt={articleData.title}
+                            className="object-cover w-full max-h-80  rounded-lg"
+                          />
+                        </div>
+                        <div>
+                          <h1 className="font-semibold text-xl">
+                            {articleData.summary}
+                          </h1>
+                        </div>
 
-                        <p>
-                          <span className="text-gray-100 pr-2">Sport: </span>
-                          {articleData.sport.name}
-                        </p>
-
-                        <div className="mt-4 text-gray-700">
+                        <div className="mt-4 text-gray-700 text-left">
+                          {articleData.teams &&
+                            articleData.teams.length === 2 && (
+                              <p className="mt-4 leading-6 text-red-500 text-center text-xl">
+                                {articleData.teams[0].name} vs{" "}
+                                {articleData.teams[1].name}
+                              </p>
+                            )}
                           {articleData.content}
                         </div>
                       </div>

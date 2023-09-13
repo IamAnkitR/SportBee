@@ -181,7 +181,7 @@ const Preferences = () => {
               onSubmit={handleSubmit}
             >
               <Form>
-                <Dialog.Panel className="w-6/12 transform overflow-hidden bg-white p-6 text-left align-middle shadow-xl transition-all rounded-lg">
+                <Dialog.Panel className="transform overflow-hidden bg-[#F1F6F9]  p-6 text-left align-middle shadow-xl transition-all rounded-lg">
                   <Dialog.Title
                     as="h3"
                     className="text-xl font-bold leading-6 text-gray-900 p-2 text-center"
@@ -191,35 +191,43 @@ const Preferences = () => {
                   </Dialog.Title>
                   {/* Sports Section */}
                   <div>
-                    <h1 className="text-center text-xl py-3">Sports</h1>
+                    <h1 className="text-center text-xl py-3 font-semibold">
+                      Sports
+                    </h1>
                     <hr />
-                    {sportsData.map((sport) => (
-                      <label key={sport.id}>
-                        <input
-                          type="checkbox"
-                          name="sportPreferences"
-                          value={sport.name}
-                          onChange={handleSportCheckboxChange}
-                        />
-                        {sport.name}
-                      </label>
-                    ))}
+                    <div className="grid grid-cols-3 gap-2">
+                      {sportsData.map((sport) => (
+                        <label key={sport.id}>
+                          <input
+                            type="checkbox"
+                            name="sportPreferences"
+                            value={sport.name}
+                            onChange={handleSportCheckboxChange}
+                          />
+                          {sport.name}
+                        </label>
+                      ))}
+                    </div>
                   </div>
                   {/* Teams Section */}
                   <div>
-                    <h1 className="text-center text-xl py-3">Teams</h1>
+                    <h1 className="text-center text-xl py-3 font-semibold">
+                      Teams
+                    </h1>
                     <hr />
-                    {teamsData.map((team) => (
-                      <label key={team.id}>
-                        <input
-                          type="checkbox"
-                          name="teamPreferences"
-                          value={team.name}
-                          onChange={handleTeamCheckboxChange}
-                        />
-                        {team.name}
-                      </label>
-                    ))}
+                    <div className="grid grid-cols-4 gap-2">
+                      {teamsData.map((team) => (
+                        <label key={team.id}>
+                          <input
+                            type="checkbox"
+                            name="teamPreferences"
+                            value={team.name}
+                            onChange={handleTeamCheckboxChange}
+                          />
+                          {team.name}
+                        </label>
+                      ))}
+                    </div>
                   </div>
                   <div className="flex justify-center gap-2 mt-5">
                     <button

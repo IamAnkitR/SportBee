@@ -102,10 +102,10 @@ const MatchDetails: React.FC<{ id: number }> = ({ id }) => {
                 leaveFrom="opacity-100 scale-100"
                 leaveTo="opacity-0 scale-95"
               >
-                <Dialog.Panel className="w-9/12 transform overflow-hidden bg-gray-900  text-white p-6 text-left shadow-xl transition-all rounded-lg">
+                <Dialog.Panel className="w-9/12 transform overflow-hidden bg-[#F1F6F9]  p-6 text-left shadow-xl transition-all rounded-lg ">
                   {matchData && (
                     <>
-                      <div className="text-center font-bold text-gray-400">
+                      <div className="text-center font-bold">
                         <Dialog.Title
                           as="h3"
                           className="text-2xl font-bold leading-6 p-4 m-1"
@@ -114,26 +114,23 @@ const MatchDetails: React.FC<{ id: number }> = ({ id }) => {
                         </Dialog.Title>
 
                         <p>
-                          <span className="text-gray-100 pr-2">Location: </span>
+                          <span className=" pr-2 text-lg">Location: </span>
                           {matchData.location}
                         </p>
 
                         <p>
-                          <span className="text-gray-100 pr-2">
-                            {" "}
-                            Starts At:{" "}
-                          </span>
+                          <span className="pr-2 text-lg"> Start Time: </span>
 
                           {new Date(matchData.startsAt).toLocaleString("en-CA")}
                         </p>
 
                         <p>
-                          <span className="text-gray-100 pr-2"> Ends At:</span>{" "}
+                          <span className="pr-2 text-lg"> End Time:</span>{" "}
                           {new Date(matchData.endsAt).toLocaleString("en-CA")}
                         </p>
 
                         <p>
-                          <span className="text-gray-100 pr-2">Sport: </span>
+                          <span className="pr-2 text-lg">Sport: </span>
                           {matchData.sportName}
                         </p>
                         <div className="mt-4 flex flex-row justify-center text-red-500 text-xl">

@@ -87,7 +87,7 @@ const Appbar = () => {
   }, [authToken]);
 
   return (
-    <Disclosure as="nav" className="border-b border-slate-200 bg-slate-500">
+    <Disclosure as="nav" className="bg-[#96B6C5] p-1">
       {() => (
         <div className="ml-10 mr-8 max-w-8xl px-2 sm:px-6">
           <div className="flex h-16 items-center justify-between">

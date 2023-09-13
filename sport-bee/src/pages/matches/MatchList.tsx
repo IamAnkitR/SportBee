@@ -96,11 +96,11 @@ const MatchList: React.FC = () => {
           <Skeleton />
         </div>
       ) : (
-        <div className="flex gap-4 w-full border-b-2 border-gray-400 pt-6 pb-6 bg-gray-300  overflow-x-scroll">
+        <div className="flex gap-4 w-full border-b-2 border-gray-400 pt-6 pb-6 bg-white  overflow-x-scroll">
           {state.matches.map((match) => (
             <div
               key={match.id}
-              className="ml-2 flex-shrink-0 h-40 w-64 p-2 border-2 border-black rounded-lg"
+              className="ml-2 flex-shrink-0 h-40 w-64 p-2 border-2 border-black rounded-md bg-[#F1F6F9]"
             >
               <div className="flex justify-between">
                 <h2 className="text-lg font-semibold">{match.sportName}</h2>

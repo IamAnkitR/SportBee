@@ -85,20 +85,26 @@ const SigninForm: React.FC = () => {
           Sign In
         </button>
       </form>
-      <div className="flex justify-evenly mt-2">
-        <Link to="/signup">
-          <button
-            className="bg-gray-500 hover:bg-gray-700 text-white font-semibold py-2 px-4 rounded-full"
-            id="logOut"
-          >
-            Signup
-          </button>
-        </Link>
-        <Link to="/home">
-          <button className="bg-gray-500 hover:bg-gray-700 text-white font-semibold py-2 px-4 rounded-full">
-            Home
-          </button>
-        </Link>
+      <div className="mt-2">
+        <div className="flex justify-around">
+          <span className="text-xl font-semibold">Create a New Account</span>
+          <Link to="/signup">
+            <button
+              className="bg-gray-700 hover:bg-gray-700 text-white font-semibold py-2 px-4 rounded-md w-20"
+              id="logOut"
+            >
+              Signup
+            </button>
+          </Link>
+        </div>
+        <div className="flex justify-around mt-2">
+          <span className="text-xl font-semibold mr-28 pr-5">Go Back</span>
+          <Link to="/home">
+            <button className="bg-gray-700 hover:bg-gray-700 text-white font-semibold py-2 px-4 rounded-md w-20">
+              Home
+            </button>
+          </Link>
+        </div>
       </div>
     </>
   );
