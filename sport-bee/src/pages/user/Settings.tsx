@@ -25,7 +25,6 @@ const Settings = () => {
   }
 
   const onSubmit: SubmitHandler<Inputs> = async (data) => {
-    console.log(data);
     const { current_password, new_password } = data;
     const authToken = localStorage.getItem("authToken");
     try {

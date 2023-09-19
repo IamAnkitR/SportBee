@@ -4,17 +4,8 @@ import { API_ENDPOINT } from "../../config/constants";
 import { useNavigate } from "react-router-dom";
 import { Dialog, Transition } from "@headlessui/react";
 import "../../App.css";
-
-interface Sport {
-  id: number;
-  name: string;
-}
-
-interface Team {
-  id: number;
-  name: string;
-  plays: string;
-}
+import { fetchSports, fetchTeams } from "../../context/data/action";
+import { Sport, Team } from "../../context/data/reducer";
 
 const Preferences = () => {
   const navigate = useNavigate();
@@ -22,35 +13,19 @@ const Preferences = () => {
   const [sportsData, setSportsData] = useState<Sport[]>([]);
   const [teamsData, setTeamsData] = useState<Team[]>([]);
 
-  const fetchSports = async () => {
+  const fetchData = async () => {
     try {
-      const response = await fetch(`${API_ENDPOINT}/sports`);
-      if (!response.ok) {
-        throw new Error("Failed to fetch sports");
-      }
-      const data = await response.json();
-      setSportsData(data.sports); // Update state variable with the sports array
+      const sports = await fetchSports();
+      const teams = await fetchTeams();
+      setSportsData(sports);
+      setTeamsData(teams);
     } catch (error) {
       console.log("Error fetching sports:", error);
     }
   };
 
-  const fetchTeams = async () => {
-    try {
-      const response = await fetch(`${API_ENDPOINT}/teams`);
-      if (!response.ok) {
-        throw new Error("Failed to fetch teams");
-      }
-      const data = await response.json();
-      setTeamsData(data); // Update state variable with the teams array
-    } catch (error) {
-      console.log("Error fetching teams:", error);
-    }
-  };
-
   useEffect(() => {
-    fetchSports();
-    fetchTeams();
+    fetchData();
   }, []);
 
   const [isModalOpen, setIsModalOpen] = useState(false);

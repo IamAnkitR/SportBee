@@ -11,7 +11,6 @@ import Home from "../pages/Home";
 import Settings from "../pages/user/Settings";
 
 const isUserAuthenticated = localStorage.getItem("authToken") !== null;
-console.log(isUserAuthenticated);
 
 const router = createBrowserRouter([
   {

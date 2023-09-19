@@ -1,84 +1,24 @@
 import React from "react";
-import { useReducer, useEffect } from "react";
-import { API_ENDPOINT } from "../../config/constants";
+import { useEffect } from "react";
 import "./MatchList.css";
 import MatchDetails from "./MatchDetails";
 import Skeleton from "./Skeleton";
+import { fetchMatches } from "../../context/matches/actions";
+import { Match } from "../../context/matches/reducer";
 
-interface Match {
-  id: number;
-  name: string;
-  sportName: string;
-  isRunning: boolean;
-  location: string;
-  summary: string;
-  endsAt: string;
-  teams: [];
-}
-
-interface State {
-  matches: Match[];
-  isLoading: boolean;
-}
-
-interface Action {
-  type: string;
-  payload?: Match[];
-}
-
-const reducer = (state: State, action: Action): State => {
-  switch (action.type) {
-    case "API_CALL_START":
-      return {
-        ...state,
-        isLoading: true,
-      };
-    case "API_CALL_END":
-      return {
-        ...state,
-        isLoading: false,
-        matches: action.payload || [],
-      };
-    case "API_CALL_ERROR":
-      return {
-        ...state,
-        isLoading: true,
-      };
-    default:
-      return state;
-  }
-};
+import {
+  useMatchesDispatch,
+  useMatchesState,
+} from "../../context/matches/context";
 
 const MatchList: React.FC = () => {
-  const [state, dispatch] = useReducer(reducer, {
-    matches: [],
-    isLoading: true,
-  });
+  const dispatchMatches = useMatchesDispatch();
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const state: any = useMatchesState();
+  const { isLoading, matches } = state;
   useEffect(() => {
-    fetchMatches();
+    fetchMatches(dispatchMatches);
   }, []);
-
-  const fetchMatches = async () => {
-    const token = localStorage.getItem("authToken") ?? "";
-
-    try {
-      const response = await fetch(`${API_ENDPOINT}/matches`, {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
-      });
-      const data = await response.json();
-      data.matches.sort((a: Match, b: Match) =>
-        a.isRunning === b.isRunning ? 0 : a.isRunning ? -1 : 1
-      );
-      dispatch({ type: "API_CALL_END", payload: data.matches });
-    } catch (error) {
-      console.log("Error fetching articles:", error);
-      dispatch({ type: "API_CALL_ERROR" });
-    }
-  };
 
   const renderMatchDetailsWithId = (id: number) => {
     return <MatchDetails id={id} />;
@@ -86,7 +26,7 @@ const MatchList: React.FC = () => {
 
   return (
     <>
-      {state.isLoading ? (
+      {isLoading ? (
         <div className="flex gap-3 w-screen">
           <Skeleton />
           <Skeleton />
@@ -97,7 +37,7 @@ const MatchList: React.FC = () => {
         </div>
       ) : (
         <div className="flex gap-4 w-full border-b-2 border-gray-400 pt-6 pb-6 bg-white  overflow-x-scroll">
-          {state.matches.map((match) => (
+          {matches.map((match: Match) => (
             <div
               key={match.id}
               className="ml-2 flex-shrink-0 h-40 w-64 p-2 border-2 border-black rounded-md bg-[#F1F6F9]"

@@ -1,222 +1,114 @@
-import React, { useReducer, useEffect, useState } from "react";
-import { API_ENDPOINT } from "../../config/constants";
+import React, { useEffect, useState } from "react";
 import Skeleton from "./Skeleton";
 import NODATA from "../../assets/images/NODATa.webp";
 import ArticleDetails from "./ArticleDetails";
-
-interface Article {
-  sport: {
-    id: number;
-    name: string;
-  };
-  id: number;
-  title: string;
-  thumbnail: string;
-  summary: string;
-  date: string;
-}
-
-interface State {
-  articles: Article[];
-  isLoading: boolean;
-}
-
-interface Action {
-  type: string;
-  payload?: Article[];
-}
-
-const sports: { id: number; name: string }[] = [
-  {
-    id: 1,
-    name: "Basketball",
-  },
-  {
-    id: 2,
-    name: "American Football",
-  },
-  {
-    id: 3,
-    name: "Rugby",
-  },
-  {
-    id: 4,
-    name: "Field Hockey",
-  },
-  {
-    id: 5,
-    name: "Table Tennis",
-  },
-  {
-    id: 6,
-    name: "Cricket",
-  },
-];
-
-const reducer = (state: State, action: Action): State => {
-  switch (action.type) {
-    case "API_CALL_START":
-      return {
-        ...state,
-        isLoading: true,
-      };
-    case "API_CALL_END":
-      return {
-        ...state,
-        isLoading: false,
-        articles: action.payload || [],
-      };
-    case "API_CALL_ERROR":
-      return {
-        ...state,
-        isLoading: false,
-      };
-    default:
-      return state;
-  }
-};
+import { fetchArticles } from "../../context/articles/actions";
+import { fetchSports } from "../../context/data/action";
+import { Article } from "../../context/articles/reducer";
+import { Sport } from "../../context/data/reducer";
+import { fetchPreferences } from "../../context/data/action";
+import {
+  useArticlesDispatch,
+  useArticlesState,
+} from "../../context/articles/context";
 
 const ArticleList: React.FC = () => {
   const authToken = localStorage.getItem("authToken");
-  const [state, dispatch] = useReducer(reducer, {
-    articles: [],
-    isLoading: true,
-  });
-  const [userPreferences, setUserPreferences] = useState<{
-    sportPreferences: { name: string }[];
-    teamPreferences: string[];
-  }>({
-    sportPreferences: [], //initial values
-    teamPreferences: [],
-  });
 
+  const dispatchArticles = useArticlesDispatch();
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const state: any = useArticlesState();
+
+  const { articles, isLoading } = state;
+  const [filteredArticles, setFilteredArticles] = useState<Article[]>([]);
+  const [sports, setSports] = useState<Sport[]>([]);
   const [selectedSport, setSelectedSport] = useState(1);
+  const [userPreferences, setUserPreferences] = useState<{
+    preferences: {
+      sportPreferences: { name: string; id: number }[];
+      teamPreferences: string[];
+    };
+  }>({
+    preferences: {
+      sportPreferences: [], //initial values
+      teamPreferences: [],
+    },
+  });
 
-  const fetchUserPreferences = async () => {
-    try {
-      const response = await fetch(`${API_ENDPOINT}/user/preferences`, {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${authToken}`,
-        },
-      });
-
-      if (!response.ok) {
-        throw new Error("Failed to fetch user preferences");
-      }
-
-      const preferences = await response.json();
-
-      const arr = preferences.preferences.sportPreferences.map(
-        (pref: { id: number }) => pref.id
-      );
-      const smallestIndex = arr.reduce(
-        (minIndex: number, current: number, currentIndex: number) => {
-          return current < arr[minIndex] ? currentIndex : minIndex;
-        },
-        0
-      );
-      setSelectedSport(arr[smallestIndex]);
-
-      setUserPreferences(preferences.preferences || {});
-    } catch (error) {
-      console.error("Error fetching user preferences:", error);
+  const fetchData = async () => {
+    const sportsData = await fetchSports();
+    setSports(sportsData);
+    if (authToken) {
+      const preferecnces = await fetchPreferences();
+      setUserPreferences(preferecnces);
+      fetchUserPreferences(preferecnces);
     }
   };
 
-  useEffect(() => {
-    if (authToken) {
-      fetchUserPreferences();
-    }
-  }, [authToken]);
+  const fetchUserPreferences = async (preferences: {
+    preferences: {
+      sportPreferences: { name: string; id: number }[];
+      teamPreferences: string[];
+    };
+  }) => {
+    const arr = preferences.preferences.sportPreferences.map(
+      (pref: { id: number }) => pref.id
+    );
+    const smallestIndex = arr.reduce(
+      (minIndex: number, current: number, currentIndex: number) => {
+        return current < arr[minIndex] ? currentIndex : minIndex;
+      },
+      0
+    );
+    setSelectedSport(arr[smallestIndex]);
 
-  useEffect(() => {
-    fetchArticles(selectedSport);
-  }, [selectedSport]);
+    setUserPreferences(preferences || {});
+  };
 
   const handleSelectSport = (sportId: number) => {
     setSelectedSport(sportId);
   };
 
-  const fetchArticles = async (sportId: number) => {
-    const token = localStorage.getItem("authToken") || "";
-
-    try {
-      dispatch({ type: "API_CALL_START" });
-      const response = await fetch(`${API_ENDPOINT}/articles`, {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
-      });
-      const data = await response.json();
-      const filteredArticles = data.filter(
-        (article: { sport: { id: number } }) => article.sport.id === sportId
-      );
-      dispatch({ type: "API_CALL_END", payload: filteredArticles });
-    } catch (error) {
-      console.log("Error fetching articles:", error);
-      dispatch({ type: "API_CALL_ERROR" });
-    }
+  const filterArticles = async (sportId: number, articles: Article[]) => {
+    const filteredArticles = articles.filter(
+      (article) => article.sport.id === sportId
+    );
+    setFilteredArticles(filteredArticles);
   };
 
   // Function to fetch articles based on user preferences
-  const fetchArticlesByUserPreferences = async () => {
-    if (!authToken) {
-      return;
-    }
-
-    const sportIds = userPreferences.sportPreferences.map(
-      (pref) => sports.find((sport) => sport.name === pref.name)?.id
+  const fetchArticlesByUserPreferences = async (
+    preferecnces: {
+      preferences: {
+        sportPreferences: { name: string; id: number }[];
+        teamPreferences: string[];
+      };
+    },
+    articles: Article[]
+  ) => {
+    const sportIds = preferecnces.preferences.sportPreferences.map(
+      (pref: { id: number }) => pref.id
     );
-
-    if (!sportIds || sportIds.length === 0) {
-      return;
-    }
-
-    const token = localStorage.getItem("authToken") || "";
-
-    try {
-      dispatch({ type: "API_CALL_START" });
-      const response = await fetch(`${API_ENDPOINT}/articles`, {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
-      });
-
-      if (!response.ok) {
-        throw new Error("Failed to fetch articles");
-      }
-
-      const data = await response.json();
-      const filteredArticles = data.filter(
-        (article: { sport: { id: number } }) =>
-          sportIds.includes(article.sport.id)
-      );
-      dispatch({ type: "API_CALL_END", payload: filteredArticles });
-    } catch (error) {
-      console.log("Error fetching articles:", error);
-      dispatch({ type: "API_CALL_ERROR" });
-    }
+    const filteredArticles = articles.filter((article) =>
+      sportIds.includes(article.sport.id)
+    );
+    setFilteredArticles(filteredArticles);
   };
 
   const handleYourNewsButtonClick = () => {
-    fetchArticlesByUserPreferences();
+    fetchArticlesByUserPreferences(userPreferences, articles);
   };
 
   const shouldDisplaySport = (sportName: string): boolean => {
     if (authToken) {
-      if (userPreferences.sportPreferences) {
-        if (userPreferences.sportPreferences.length === 0) {
+      console.log("triggers");
+      if (userPreferences.preferences.sportPreferences) {
+        if (userPreferences.preferences.sportPreferences.length === 0) {
           // If no sport preferences, display all sports
           return true;
         } else {
           // Check if the selected sportName is in the user's sportPreferences
-          return userPreferences.sportPreferences.some(
+          return userPreferences.preferences.sportPreferences.some(
             (pref) => pref.name === sportName
           );
         }
@@ -231,6 +123,22 @@ const ArticleList: React.FC = () => {
   const renderArticleDetailsWithId = (id: number) => {
     return <ArticleDetails id={id} />;
   };
+
+  useEffect(() => {
+    fetchArticles(dispatchArticles);
+    fetchData();
+  }, []);
+
+  useEffect(() => {
+    filterArticles(selectedSport, articles);
+  }, [selectedSport, isLoading]);
+
+  useEffect(() => {
+    if (authToken) {
+      console.log("triggers 2");
+      fetchUserPreferences(userPreferences);
+    }
+  }, [authToken, userPreferences]);
 
   return (
     <>
@@ -276,7 +184,7 @@ const ArticleList: React.FC = () => {
         </div>
       </div>
       <div className="bg-white min-h-screen py-2 px-2">
-        {state.isLoading ? (
+        {isLoading ? (
           <div>
             <Skeleton />
             <Skeleton />
@@ -288,7 +196,7 @@ const ArticleList: React.FC = () => {
             className="flex flex-col overflow-x-hidden"
             style={{ width: "1000px" }}
           >
-            {state.articles.length === 0 ? (
+            {filteredArticles.length === 0 ? (
               <div className="flex justify-center items-center h-11/12 w-11/12">
                 <img
                   src={NODATA}
@@ -297,7 +205,7 @@ const ArticleList: React.FC = () => {
                 />
               </div>
             ) : (
-              state.articles.map((article) => (
+              filteredArticles.map((article) => (
                 <div
                   key={article.id}
                   className="pb-2 bg-[#F1F6F9] my-3 rounded-lg "
