@@ -101,7 +101,6 @@ const ArticleList: React.FC = () => {
 
   const shouldDisplaySport = (sportName: string): boolean => {
     if (authToken) {
-      console.log("triggers");
       if (userPreferences.preferences.sportPreferences) {
         if (userPreferences.preferences.sportPreferences.length === 0) {
           // If no sport preferences, display all sports
@@ -135,7 +134,6 @@ const ArticleList: React.FC = () => {
 
   useEffect(() => {
     if (authToken) {
-      console.log("triggers 2");
       fetchUserPreferences(userPreferences);
     }
   }, [authToken, userPreferences]);

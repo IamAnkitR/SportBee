@@ -70,7 +70,6 @@ const Preferences = () => {
   };
 
   const handleSubmit = async () => {
-    console.log(selectedSports, selectedTeams);
     const values = {
       preferences: {
         sportPreferences: selectedSports.map((sport) => ({
@@ -87,7 +86,6 @@ const Preferences = () => {
 
     const authToken = localStorage.getItem("authToken");
     try {
-      console.log(values);
       const response = await fetch(`${API_ENDPOINT}/user/preferences`, {
         method: "PATCH",
         headers: {
