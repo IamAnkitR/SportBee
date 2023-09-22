@@ -2,6 +2,7 @@ import React from "react";
 import { useForm, SubmitHandler } from "react-hook-form";
 import { API_ENDPOINT } from "../../config/constants";
 import { Link, useNavigate } from "react-router-dom";
+import { useSnackbar } from "notistack";
 
 type Inputs = {
   email: string;
@@ -14,6 +15,8 @@ const SigninForm: React.FC = () => {
     handleSubmit,
     formState: { errors },
   } = useForm<Inputs>();
+
+  const { enqueueSnackbar } = useSnackbar();
 
   const navigate = useNavigate();
 
@@ -39,8 +42,10 @@ const SigninForm: React.FC = () => {
       localStorage.setItem("userData", JSON.stringify(userData.user));
 
       // After successful signin, navigate the user to dashboard
+      enqueueSnackbar("Signin Successful", { variant: "success" });
       navigate("/account");
     } catch (error) {
+      enqueueSnackbar("Signin Failed", { variant: "error" });
       console.error("Sign-in failed:", error);
     }
   };

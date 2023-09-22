@@ -11,9 +11,24 @@ import {
   useArticlesDispatch,
   useArticlesState,
 } from "../../context/articles/context";
+import { useSnackbar } from "notistack";
 
 const ArticleList: React.FC = () => {
   const authToken = localStorage.getItem("authToken");
+  const userData = localStorage.getItem("userData");
+  const { enqueueSnackbar } = useSnackbar();
+  useEffect(() => {
+    if (userData) {
+      const user = JSON.parse(userData);
+      enqueueSnackbar(`Welcome to SportsBee ${user.name}`, {
+        variant: "success",
+      });
+    } else {
+      enqueueSnackbar(`Welcome to SportsBee`, {
+        variant: "success",
+      });
+    }
+  }, []);
 
   const dispatchArticles = useArticlesDispatch();
   // eslint-disable-next-line @typescript-eslint/no-explicit-any

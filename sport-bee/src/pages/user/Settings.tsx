@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import { useForm, SubmitHandler } from "react-hook-form";
 import Player from "../../assets/images/Player.png";
 import { API_ENDPOINT } from "../../config/constants";
+import { useSnackbar } from "notistack";
 
 type Inputs = {
   current_password: string;
@@ -10,6 +11,7 @@ type Inputs = {
 };
 
 const Settings = () => {
+  const { enqueueSnackbar } = useSnackbar();
   const {
     register,
     handleSubmit,
@@ -43,12 +45,10 @@ const Settings = () => {
       console.log(userData);
 
       if (!response.ok) {
-        alert("You Entered Wrong Password");
+        enqueueSnackbar("You Entered Wrong Password", { variant: "error" });
         throw new Error("Operation failed");
       }
-      alert("Password Updated Successfully");
-
-      console.log("Updated Password successfully");
+      enqueueSnackbar("Password Updated Successfully", { variant: "success" });
     } catch (error) {
       console.error("Sign-in failed:", error);
     }

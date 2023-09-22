@@ -1,14 +1,19 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import Logo from "../assets/images/Logo.png";
+import { useSnackbar } from "notistack";
 
 const Home = () => {
   const authToken = localStorage.getItem("authToken");
+  const { enqueueSnackbar } = useSnackbar();
   const userData = localStorage.getItem("userData");
   let user, name;
   if (userData) {
     user = JSON.parse(userData);
     name = user.name;
+    enqueueSnackbar(`Welcome ${name}`, { variant: "success" });
+  } else {
+    enqueueSnackbar(`Welcome Guest`, { variant: "success" });
   }
 
   return (

@@ -2,19 +2,7 @@ import { useEffect, useReducer, useState } from "react";
 import { API_ENDPOINT } from "../../config/constants";
 import NODATA from "../../assets/images/NODATa.webp";
 import ArticleDetails from "../articles/ArticleDetails";
-
-interface Article {
-  sport: {
-    id: number;
-    name: string;
-  };
-  id: number;
-  title: string;
-  thumbnail: string;
-  summary: string;
-  date: string;
-  teams: { name: string }[];
-}
+import { Article } from "../../context/articles/reducer";
 
 interface State {
   articles: Article[];

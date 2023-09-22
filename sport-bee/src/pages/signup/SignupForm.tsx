@@ -1,11 +1,13 @@
 import React, { useState } from "react";
 import { API_ENDPOINT } from "../../config/constants";
 import { Link, useNavigate } from "react-router-dom";
+import { useSnackbar } from "notistack";
 
 const SignupForm: React.FC = () => {
   const [userName, setUserName] = useState("");
   const [userEmail, setUserEmail] = useState("");
   const [userPassword, setUserPassword] = useState("");
+  const { enqueueSnackbar } = useSnackbar();
 
   const navigate = useNavigate();
 
@@ -29,8 +31,9 @@ const SignupForm: React.FC = () => {
 
       if (!response.ok) {
         throw new Error("Sign-up failed");
+        enqueueSnackbar("Sign-up failed", { variant: "error" });
       }
-      console.log("Sign-up successful");
+      enqueueSnackbar("Sign-up Successful", { variant: "success" });
 
       // set the token in localStorage
       localStorage.setItem("authToken", data.auth_token);
